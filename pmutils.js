@@ -29,7 +29,7 @@ postman.setEnvironmentVariable("setHeader", () => {
     ]
     pm.environment.set('listHeader', listHeader);
 });
-setHeader = eval(pm.environment.get("setHeader"));
+
 
 
 postman.setEnvironmentVariable("setOntologyParams", () => {
@@ -65,7 +65,7 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
         });
     });
 });
-setOntologyParams = eval(pm.environment.get("setOntologyParams"));
+
 
 
 postman.setEnvironmentVariable("setup", () => {
@@ -91,4 +91,3 @@ postman.setEnvironmentVariable("setup", () => {
     postman.setEnvironmentVariable("triggerExecutorServiceUrl", "localhost:9101/trigger/executor/api/v1/triggers");
     postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
 });
-setup = eval(pm.environment.get("setup"));
