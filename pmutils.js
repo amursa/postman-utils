@@ -82,6 +82,14 @@ postman.setEnvironmentVariable("setup", () => {
     pm.collectionVariables.clear();
     pm.environment.set("tenantId", initialTenantId);
     pm.environment.set("userEmail", initialUserEmail);
+
+    if (!pm.environment.get("debug")) {
+        pm.environment.set("debug", false);
+    }
+    var debug = pm.environment.get("debug");
+
+
+    
     //Endpoints
     postman.setEnvironmentVariable("campaignManagementServiceBaseUrl", "http://localhost:9096/campaign/v1");
     postman.setEnvironmentVariable("adminPortalServingServiceBaseUrl", "http://localhost:9098/adminBackend");
