@@ -91,3 +91,11 @@ postman.setEnvironmentVariable("setup", () => {
     postman.setEnvironmentVariable("triggerExecutorServiceUrl", "localhost:9101/trigger/executor/api/v1/triggers");
     postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
 });
+var utils = eval(pm.globals.get("pmutiljs"));
+var setHeader = eval(pm.environment.get("setHeader"));
+var setOntologyParams = eval(pm.environment.get("setOntologyParams"));
+var setup = eval(pm.environment.get("setup"));
+utils();
+setup();
+setHeader();
+setOntologyParams();
