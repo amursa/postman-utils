@@ -18,9 +18,12 @@ postman.setEnvironmentVariable("setup", () => {
         pm.environment.set("debug", false);
     }
 
-    pm.environment.set("barcodes", "[{\"barcode\": \"62600963840\",\"enabled\": true, \"isUPC\": true }]");
-    pm.environment.set("chainId", JSON.stringify({"661250086":true}));
-    pm.environment.set("location", JSON.stringify({"14803720197":true}));
+    pm.environment.has("barcodes") ? pm.environment.set("barcodes", "[{\"barcode\": \"62600963840\",\"enabled\": true, \"isUPC\": true }]");
+    pm.environment.has("chainId") ? pm.environment.set("chainId", JSON.stringify({"661250086":true}));
+    pm.environment.has("location") ? pm.environment.set("location", JSON.stringify({"14803720197":true}));
+    // pm.environment.set("barcodes", "[{\"barcode\": \"62600963840\",\"enabled\": true, \"isUPC\": true }]");
+    // pm.environment.set("chainId", JSON.stringify({"661250086":true}));
+    // pm.environment.set("location", JSON.stringify({"14803720197":true}));
     //Endpoints
     postman.setEnvironmentVariable("campaignManagementServiceBaseUrl", "http://localhost:9096/campaign/v1");
     postman.setEnvironmentVariable("adminPortalServingServiceBaseUrl", "http://localhost:9098/adminBackend");
