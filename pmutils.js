@@ -66,39 +66,39 @@ postman.setEnvironmentVariable("setHeader", () => {
         pm.environment.set('listHeader', listHeader);
 });
 
-postman.setEnvironmentVariable("setOntologyParams", () => {
-    let options = {
-    url: pm.environment.get("adminPortalServingServiceBaseUrl") + "/legacy/v1/ontology/taxonomyNodes",
-    method: 'GET',
-    header: pm.environment.get('listHeader'),
-    };
+// postman.setEnvironmentVariable("setOntologyParams", () => {
+//     let options = {
+//     url: pm.environment.get("adminPortalServingServiceBaseUrl") + "/legacy/v1/ontology/taxonomyNodes",
+//     method: 'GET',
+//     header: pm.environment.get('listHeader'),
+//     };
 
-    pm.sendRequest(options, function (err, response) {
-        var jsonData = response.json();
-            // toPrint("First Ontology Node is " + jsonData[0].node_id + " and length of the array is " + jsonData.length, debug, true);
-            var ontologyIds = [];
-            var ontologyKeywords = [];
-            _.each(jsonData, (item) => {
-                //console.log("Item is " + item);
-                ontologyIds.push(item.node.node_id);
-            });
-            // toPrint("List of ontologyIds is " + ontologyIds, debug, true);
-            var ontologyNodeId =  _.sample(ontologyIds);
-            // toPrint("Choosen ontologyNodeId " + ontologyNodeId, true, true);
-            pm.collectionVariables.set("ontologyNodeId", JSON.stringify(ontologyNodeId));
+//     pm.sendRequest(options, function (err, response) {
+//         var jsonData = response.json();
+//             // toPrint("First Ontology Node is " + jsonData[0].node_id + " and length of the array is " + jsonData.length, debug, true);
+//             var ontologyIds = [];
+//             var ontologyKeywords = [];
+//             _.each(jsonData, (item) => {
+//                 //console.log("Item is " + item);
+//                 ontologyIds.push(item.node.node_id);
+//             });
+//             // toPrint("List of ontologyIds is " + ontologyIds, debug, true);
+//             var ontologyNodeId =  _.sample(ontologyIds);
+//             // toPrint("Choosen ontologyNodeId " + ontologyNodeId, true, true);
+//             pm.collectionVariables.set("ontologyNodeId", JSON.stringify(ontologyNodeId));
 
 
-            _.each(jsonData, (item) => {
-                if (item.node.node_id == ontologyNodeId) {
-                _.each(item.childNodes, (childitem) => {
-                    ontologyKeywords.push(childitem.node_name);
-                });
-                // toPrint("Choosen ontologyKeywords " + ontologyKeywords, true, true);
-                pm.collectionVariables.set("ontologyKeywords", JSON.stringify(ontologyKeywords));
-            }
-        });
-    });
-});
+//             _.each(jsonData, (item) => {
+//                 if (item.node.node_id == ontologyNodeId) {
+//                 _.each(item.childNodes, (childitem) => {
+//                     ontologyKeywords.push(childitem.node_name);
+//                 });
+//                 // toPrint("Choosen ontologyKeywords " + ontologyKeywords, true, true);
+//                 pm.collectionVariables.set("ontologyKeywords", JSON.stringify(ontologyKeywords));
+//             }
+//         });
+//     });
+// });
 
 // postman.setEnvironmentVariable("toPrint", (logMessage, debug, localDebug) => {
 //     if (debug && localDebug) {
@@ -352,3 +352,6 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
 //         // }   
 // });
 
+// var setHeader = eval(pm.environment.get("setHeader"));
+// var setOntologyParams = eval(pm.environment.get("setOntologyParams"));
+// var setup = eval(pm.environment.get("setup"));
