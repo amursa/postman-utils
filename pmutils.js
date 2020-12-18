@@ -12,13 +12,15 @@ postman.setEnvironmentVariable("setup", () => {
     pm.collectionVariables.clear();
     pm.environment.set("tenantId", initialTenantId);
     pm.environment.set("userEmail", initialUserEmail);
-    pm.environment.has("debug") ? debug = pm.environment.get("debug"): pm.environment.set("debug", false);
-    pm.environment.has("barcodes") ? pm.environment.set("barcodes", "[{\"barcode\": \"62600963840\",\"enabled\": true, \"isUPC\": true }]");
-    pm.environment.has("chainId") ? pm.environment.set("chainId", JSON.stringify({"661250086":true}));
-    pm.environment.has("location") ? pm.environment.set("location", JSON.stringify({"14803720197":true}));
-    // pm.environment.set("barcodes", "[{\"barcode\": \"62600963840\",\"enabled\": true, \"isUPC\": true }]");
-    // pm.environment.set("chainId", JSON.stringify({"661250086":true}));
-    // pm.environment.set("location", JSON.stringify({"14803720197":true}));
+    pm.environment.has("debug") ? 
+        var debug = pm.environment.get("debug");
+    else {
+        pm.environment.set("debug", false);
+    }
+
+    pm.environment.set("barcodes", "[{\"barcode\": \"62600963840\",\"enabled\": true, \"isUPC\": true }]");
+    pm.environment.set("chainId", JSON.stringify({"661250086":true}));
+    pm.environment.set("location", JSON.stringify({"14803720197":true}));
     //Endpoints
     postman.setEnvironmentVariable("campaignManagementServiceBaseUrl", "http://localhost:9096/campaign/v1");
     postman.setEnvironmentVariable("adminPortalServingServiceBaseUrl", "http://localhost:9098/adminBackend");
@@ -77,7 +79,7 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
                 //console.log("Item is " + item);
                 ontologyIds.push(item.node.node_id);
             });
-            toPrint("List of ontologyIds is " + ontologyIds, debug, true);
+            // toPrint("List of ontologyIds is " + ontologyIds, debug, true);
             var ontologyNodeId =  _.sample(ontologyIds);
             // toPrint("Choosen ontologyNodeId " + ontologyNodeId, true, true);
             pm.collectionVariables.set("ontologyNodeId", JSON.stringify(ontologyNodeId));
@@ -88,7 +90,7 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
                 _.each(item.childNodes, (childitem) => {
                     ontologyKeywords.push(childitem.node_name);
                 });
-                toPrint("Choosen ontologyKeywords " + ontologyKeywords, true, true);
+                // toPrint("Choosen ontologyKeywords " + ontologyKeywords, true, true);
                 pm.collectionVariables.set("ontologyKeywords", JSON.stringify(ontologyKeywords));
             }
         });
