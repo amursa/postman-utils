@@ -12,7 +12,7 @@ postman.setEnvironmentVariable("setup", () => {
     pm.collectionVariables.clear();
     pm.environment.set("tenantId", initialTenantId);
     pm.environment.set("userEmail", initialUserEmail);
-    pm.environment.has("debug") ? 
+    if (pm.environment.has("debug"))
         var debug = pm.environment.get("debug");
     else {
         pm.environment.set("debug", false);
