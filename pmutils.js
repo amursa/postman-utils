@@ -1,4 +1,36 @@
 //Functions
+postman.setEnvironmentVariable("setup", () => {
+    //modules
+    const moment = require('moment');
+    var _ = require('lodash');
+    var uuid = require('uuid');
+
+    var initialTenantId = pm.globals.get("tenantId");
+    var initialUserEmail = pm.globals.get("userEmail");
+    // pm.globals.clear();
+    pm.environment.clear();
+    pm.collectionVariables.clear();
+    pm.environment.set("tenantId", initialTenantId);
+    pm.environment.set("userEmail", initialUserEmail);
+
+    
+    if (pm.environment.has("debug"))
+        var debug = pm.environment.get("debug");
+    else {
+        pm.environment.set("debug", false);
+    }
+
+    //Endpoints
+    postman.setEnvironmentVariable("campaignManagementServiceBaseUrl", "http://localhost:9096/campaign/v1");
+    postman.setEnvironmentVariable("adminPortalServingServiceBaseUrl", "http://localhost:9098/adminBackend");
+    postman.setEnvironmentVariable("orderManagementServiceBaseUrl", "http://localhost:9094/order/v1");
+    postman.setEnvironmentVariable("companyManagementServiceBaseUrl", "http://localhost:9090/company/v1");
+    postman.setEnvironmentVariable("triggerManagementServiceUrl", "localhost:9103/trigger/management/api/v1/triggers");
+    postman.setEnvironmentVariable("engagementsBU", "http://localhost:9095/engagement/v1");
+    postman.setEnvironmentVariable("triggerExecutorServiceUrl", "localhost:9101/trigger/executor/api/v1/triggers");
+    postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
+});
+
 postman.setEnvironmentVariable("setHeader", () => {
     pm.request.headers.add({
         key: 'X-Tenant-Id',
@@ -46,9 +78,9 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
                 //console.log("Item is " + item);
                 ontologyIds.push(item.node.node_id);
             });
-            toPrint("List of ontologyIds is " + ontologyIds, debug, true);
+            // toPrint("List of ontologyIds is " + ontologyIds, debug, true);
             var ontologyNodeId =  _.sample(ontologyIds);
-            toPrint("Choosen ontologyNodeId " + ontologyNodeId, true, true);
+            // toPrint("Choosen ontologyNodeId " + ontologyNodeId, true, true);
             pm.collectionVariables.set("ontologyNodeId", JSON.stringify(ontologyNodeId));
 
 
@@ -57,7 +89,7 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
                 _.each(item.childNodes, (childitem) => {
                     ontologyKeywords.push(childitem.node_name);
                 });
-                toPrint("Choosen ontologyKeywords " + ontologyKeywords, true, true);
+                // toPrint("Choosen ontologyKeywords " + ontologyKeywords, true, true);
                 pm.collectionVariables.set("ontologyKeywords", JSON.stringify(ontologyKeywords));
             }
         });
@@ -79,11 +111,11 @@ postman.setEnvironmentVariable("setup", () => {
     pm.environment.set("userEmail", initialUserEmail);
 
     
-    if (pm.environment.has("debug"))
-        var debug = pm.environment.get("debug");
-    else {
-        pm.environment.set("debug", false);
-    }
+    // if (pm.environment.has("debug"))
+    //     var debug = pm.environment.get("debug");
+    // else {
+    //     pm.environment.set("debug", false);
+    // }
 
     //Endpoints
     postman.setEnvironmentVariable("campaignManagementServiceBaseUrl", "http://localhost:9096/campaign/v1");
