@@ -105,3 +105,249 @@ postman.setEnvironmentVariable("toPrint", (logMessage, debug, localDebug) => {
         console.log(logMessage);
     }
 });
+
+postman.setEnvironmentVariable("countObjects", (objectName, tenantId, outputVariableName, compare, expectedChange) => {
+    var tenantId = pm.environment.get('tenantId');
+    if (expectedChange === null || expectedChange === undefined || ["increased", "decreased", "same"].indexOf(expectedChange) == -1) {
+        expectedChange = "same";
+    }
+
+
+    if (!tenantId) {
+        tenantId = "dev";
+        postman.setEnvironmentVariable("tenantId", tenantId);
+    }
+
+    if (objectName === null || objectName === undefined || objectName == "campaign") {
+        objectName = "campaign";
+        var url = pm.environment.get("campaignManagementServiceBaseUrl");
+        var suffix = "/campaigns";
+        url_address = url + suffix;
+    } else if (objectName == "company") {
+        var url = pm.environment.get("companyManagementServiceBaseUrl");
+        var suffix = "/companies";
+        url_address = url + suffix;
+    } else if (objectName == "order") {
+        var url = pm.environment.get("orderManagementServiceBaseUrl");
+        var suffix = "/insertionOrders";
+        url_address = url + suffix;
+    } else {
+        objectName = "campaign";
+        url_address = pm.environment.get("campaignManagementServiceBaseUrl") + "/campaigns";
+    }
+
+    toPrint("Determined tenantId is " + tenantId, debug, true);
+    toPrint("Determined url is " + url_address, debug, true);
+
+    var options = {
+        method: 'GET',
+        header: pm.environment.get('listHeader'),
+        url: url_address
+    };
+    if (compare == false) {
+        pm.sendRequest(options, function (error, response) {
+            if (error) throw new Error(error);
+            var jsonData = response.json();
+            //var nmb_of_objects = (objectName == "campaign") ? jsonData.objects.length : (objectName == "company" || objectName == "order") ? jsonData.length : "";
+            var nmb_of_objects = jsonData.pagination.objectCount;
+            pm.collectionVariables.set(outputVariableName, nmb_of_objects);
+            toPrint(outputVariableName + " " + pm.collectionVariables.get(outputVariableName), true, true);
+        });
+    } else {
+        pm.sendRequest(options, function (error, response) {
+            if (error) throw new Error(error);
+            var jsonData = response.json();
+            //var nmb_of_objects = (objectName == "campaign") ? jsonData.objects.length : (objectName == "company" || objectName == "order") ? jsonData.length : "";
+            var nmb_of_objects = jsonData.pagination.objectCount;
+            pm.collectionVariables.set(outputVariableName, nmb_of_objects);
+            toPrint(outputVariableName + " " + pm.collectionVariables.get(outputVariableName), true, true);
+            if (objectName == "campaign") {
+                if (expectedChange == "increased") {
+                    pm.test('Campaign got incremented ', function () {
+                        pm.expect(pm.collectionVariables.get("CampaignsBefore")).to.eql(pm.collectionVariables.get("CampaignsAfter") - 1);
+                    });
+                } else if (expectedChange == "decreased") {
+                    pm.test('Campaign got decremented ', function () {
+                        pm.expect(pm.collectionVariables.get("CampaignsBefore")).to.eql(pm.collectionVariables.get("CampaignsAfter") + 1);
+                    });
+                } else if (expectedChange == "same") {
+                    pm.test('Campaign before and after action is the same ', function () {
+                        pm.expect(pm.collectionVariables.get("CampaignsBefore")).to.eql(pm.collectionVariables.get("CampaignsAfter"));
+                    });
+                } else {
+                    toPrint("expectedChange parameter in objectCount got unexpected and equal to " + expectedChange, true, true);
+                }
+            } else if (objectName == "company") {
+                if (expectedChange == "increased") {
+                    pm.test('Company got incremented ', function () {
+                        pm.expect(pm.collectionVariables.get("CompaniesBefore")).to.eql(pm.collectionVariables.get("CompaniesAfter") - 1);
+                    });
+                } else if (expectedChange == "decreased") {
+                    pm.test('Company got decreased.', function () {
+                        pm.expect(pm.collectionVariables.get("CompaniesBefore")).to.eql(pm.collectionVariables.get("CompaniesAfter") + 1);
+                    });
+                } else if (expectedChange == "same") {
+                    pm.test('Company is the same before and after action. ', function () {
+                        pm.expect(pm.collectionVariables.get("CompaniesBefore")).to.eql(pm.collectionVariables.get("CompaniesAfter"));
+                    });
+                } else {
+                    toPrint("expectedChange parameter in objectCount got unexpected and equal to " + expectedChange, true, true);
+                }
+            } else if (objectName == "order") {
+                if (expectedChange == "increased") {
+                    pm.test('Order got incremented ', function () {
+                        pm.expect(pm.collectionVariables.get("OrdersBefore")).to.eql(pm.collectionVariables.get("OrdersAfter") - 1);
+                    });
+                } else if (expectedChange == "decreased") {
+                    pm.test('Order got decremented ', function () {
+                        pm.expect(pm.collectionVariables.get("OrdersBefore")).to.eql(pm.collectionVariables.get("OrdersAfter") + 1);
+                    });
+                } else if (expectedChange == "same") {
+                    pm.test('Order has the same number of orders before and after operation. ', function () {
+                        pm.expect(pm.collectionVariables.get("OrdersBefore")).to.eql(pm.collectionVariables.get("OrdersAfter"));
+                    });
+                } else {
+                    toPrint("expectedChange parameter in objectCount got unexpected and equal to " + expectedChange, true, true);
+                }
+            } else {
+                toPrint("unexpected objectName variable", true, true);
+            }
+        });
+    }
+});
+
+postman.setEnvironmentVariable("diff", (obj1, obj2) => {
+    const result = {};
+    if (Object.is(obj1, obj2)) {
+        return undefined;
+    }
+    if (!obj2 || typeof obj2 !== 'object') {
+        return obj2;
+    }
+    Object.keys(obj1 || {}).concat(Object.keys(obj2 || {})).forEach(key => {
+        if (obj2[key] !== obj1[key] && !Object.is(obj1[key], obj2[key])) {
+            result[key] = obj2[key];
+        }
+        if (typeof obj2[key] === 'object' && typeof obj1[key] === 'object') {
+            const value = diff(obj1[key], obj2[key]);
+            if (value !== undefined) {
+                result[key] = value;
+            }
+        }
+    });
+    return result;
+});
+
+postman.setEnvironmentVariable("sleep", (milisecond) => {
+    const date = Date.now();
+    // Sleep an amount of milliseconds given
+    while ((date + milisecond) > Date.now());
+});
+
+postman.setEnvironmentVariable("timeDiff", (createdTime) => {
+    //given time from json
+    var parsedTime = moment(createdTime, 'YYYY-MM-DDTHH:mm:ss.SSZ').toDate();
+    var correctFormat = moment(parsedTime).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+    var utcCorrectFormat = moment.utc(correctFormat).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+    // toPrint("Parsed time is " + utcCorrectFormat, debug, true);
+    var createdUnix = moment(utcCorrectFormat).format('x');
+    //Current UTC time is calculated below
+
+    var localDate = new Date();
+    var timeNowUnix = moment(localDate).format('x');
+    // var currentTimeUnix = parseInt(moment(localDate).format('x'));
+    // toPrint("CurrentTimeUnix " + timeNowUnix, debug, true);
+    // toPrint("createdTimeUnix " + createdUnix, debug, true);
+    if ((parseInt(timeNowUnix) - parseInt(createdUnix)) < 5000) {
+        return true;
+    } else {
+        return false;
+    }
+});
+
+postman.setEnvironmentVariable("differentValue", (list, value) => {
+    toPrint("List to delete value from " + list, debug, true);
+    toPrint("Value to delete from list is  " + value, debug, true);
+    for (var i = list.length; i--;) {
+        // console.log(list[i]);
+        if (list[i] === value) {
+            list.splice(i, 1);
+            // toPrint("Remaining list " + list, debug, true);
+        }
+    }
+    new_value = _.sample(list);
+    toPrint("Choosen value " + new_value, debug, true);
+    return new_value;
+});
+
+postman.setEnvironmentVariable("defineVariable", (obj1, obj2, obj3) => {
+    var list = obj1;
+    var variable = _.sample(list);
+    if (Array.isArray(variable)) {
+        uniqueVariable = Array.from(new Set(variable));
+        toPrint((obj3 + "  Is an array and length is " + uniqueVariable.length), debug, true);
+        pm.collectionVariables.set(obj3 + "count", variable.length);
+        pm.collectionVariables.set(obj3 + "unique", uniqueVariable);
+    }
+    // else{
+    //     console.log(obj3 + "  Is NOT an array");
+    // }
+    toPrint((obj2 + JSON.stringify(variable)), debug, true);
+    pm.collectionVariables.set(obj3, JSON.stringify(variable));
+});
+
+postman.setEnvironmentVariable("isValidURL", (string) => {
+    var res = string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+    //console.log("isValidURL returns " + res);
+    return (res !== null);
+});
+
+postman.setEnvironmentVariable("setInsertionLineItems", (obj) => {
+    toPrint("List length is " + obj.length, true, true);
+    obj.forEach((item) => { 
+        Object.entries(item).forEach(([key, val]) => {
+            console.log(`key-${key}-val-${val}`);
+            //orderLineItemType = [SCAN, VIDEO, LOOKBOOK, SCAN_MISSION, PURCHASE_VALIDATION, BRANDED_COLLECTION, OTT, PROMO_UNIT, CONSUMER_RESEARCH_SURVEY, CREATIVE_DEVELOPMENT, PUSH_NOTIFICATION_FEE, INSTANT_SURPRISE] 
+            if (key == "PROMO_UNIT"){
+                    console.log("We have to create a banner OrderLineItem"); 
+                    let orderLineItemjson = [{"orderLineItemType": "PROMO_UNIT", "description": "Banner description"}];    
+            } else if (key == "SCAN"){
+                    console.log("We have to create a banner OrderLineItem");
+            }else if (key == "VIDEO"){
+                    console.log("We have to create a banner OrderLineItem");
+            }else if (key == "LOOKBOOK"){
+                    console.log("We have to create a banner OrderLineItem");
+            }else if (key == "SCAN_MISSION"){
+                    console.log("We have to create a banner OrderLineItem");
+            }else if (key == "PURCHASE_VALIDATION"){
+                    console.log("We have to create a banner OrderLineItem");
+            }else if (key == "BRANDED_COLLECTION"){
+                    console.log("We have to create a banner OrderLineItem");
+            }else if (key == "OTT"){
+                    console.log("We have to create a banner OrderLineItem");
+            }else if (key == "CONSUMER_RESEARCH_SURVEY"){
+                    console.log("We have to create a banner OrderLineItem");
+            }else if (key == "CREATIVE_DEVELOPMENT"){
+                    console.log("We have to create a banner OrderLineItem");
+            }else if (key == "PUSH_NOTIFICATION_FEE"){
+                    console.log("We have to create a banner OrderLineItem");
+            }else if (key == "INSTANT_SURPRISE"){
+                    console.log("We have to create a banner OrderLineItem");
+            }else {
+                alert("ALERT:Undefined InsertionLineItem given")
+            }
+        });
+    });
+      
+        
+        // if(obj[key]=="PROMO_UNIT"){
+        //     console.log("PROMO_UNIT is provided")
+        // }
+        // if(obj[value]=="FreePricingModel"){
+        //     console.log("PRICING MODEL FreePricing Model is provided");
+        // } else if (obj[value] == "FlatFee") {
+        //     console.log("PRICING MODEL Flat fee is provided");
+        // } else {
+        //     console.log("Value contains unexpected input");
+        // }   
+});
