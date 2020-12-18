@@ -12,7 +12,7 @@ postman.setEnvironmentVariable("setup", () => {
     pm.collectionVariables.clear();
     pm.environment.set("tenantId", initialTenantId);
     pm.environment.set("userEmail", initialUserEmail);
-    pm.environment.has("debug") ? var debug = pm.environment.get("debug"): pm.environment.set("debug", false);
+    pm.environment.has("debug") ? debug = pm.environment.get("debug"): pm.environment.set("debug", false);
     pm.environment.has("barcodes") ? pm.environment.set("barcodes", "[{\"barcode\": \"62600963840\",\"enabled\": true, \"isUPC\": true }]");
     pm.environment.has("chainId") ? pm.environment.set("chainId", JSON.stringify({"661250086":true}));
     pm.environment.has("location") ? pm.environment.set("location", JSON.stringify({"14803720197":true}));
