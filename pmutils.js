@@ -30,9 +30,6 @@ postman.setEnvironmentVariable("setHeader", () => {
     pm.environment.set('listHeader', listHeader);
 });
 
-
-
-
 postman.setEnvironmentVariable("setOntologyParams", () => {
     let options = {
     url: pm.environment.get("adminPortalServingServiceBaseUrl") + "/legacy/v1/ontology/taxonomyNodes",
@@ -67,8 +64,6 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
     });
 });
 
-
-
 postman.setEnvironmentVariable("setup", () => {
     //modules
     const moment = require('moment');
@@ -83,13 +78,13 @@ postman.setEnvironmentVariable("setup", () => {
     pm.environment.set("tenantId", initialTenantId);
     pm.environment.set("userEmail", initialUserEmail);
 
-    if (!pm.environment.get("debug")) {
+    
+    if (pm.environment.has("debug"))
+        var debug = pm.environment.get("debug");
+    else {
         pm.environment.set("debug", false);
     }
-    var debug = pm.environment.get("debug");
 
-
-    
     //Endpoints
     postman.setEnvironmentVariable("campaignManagementServiceBaseUrl", "http://localhost:9096/campaign/v1");
     postman.setEnvironmentVariable("adminPortalServingServiceBaseUrl", "http://localhost:9098/adminBackend");
@@ -100,8 +95,6 @@ postman.setEnvironmentVariable("setup", () => {
     postman.setEnvironmentVariable("triggerExecutorServiceUrl", "localhost:9101/trigger/executor/api/v1/triggers");
     postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
 });
-
-
 
 postman.setEnvironmentVariable("toPrint", (logMessage, debug, localDebug) => {
     if (debug && localDebug) {
