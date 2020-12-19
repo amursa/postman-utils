@@ -13,10 +13,11 @@ postman.setEnvironmentVariable("setup", () => {
     pm.environment.set("tenantId", initialTenantId);
     pm.environment.set("userEmail", initialUserEmail);
     if (pm.environment.has("debug"))
-        var debug = pm.environment.get("debug")
+        var debug = pm.environment.get("debug");
     else {
         pm.environment.set("debug", false);
     }
+    
     if (pm.environment.has("countObjects"))
         var countObjects = pm.environment.get("countObjects");
     else {
@@ -132,6 +133,7 @@ postman.setEnvironmentVariable("setup", () => {
         });
         var countObjects = pm.environment.get("countObjects");
     }
+    
     if (pm.environment.has("toPrint"))
         var toPrint = pm.environment.get("toPrint");
     else {
@@ -143,6 +145,17 @@ postman.setEnvironmentVariable("setup", () => {
         var toPrint = pm.environment.get("toPrint");
     }
 
+    if (pm.environment.has("sleep"))
+        var sleep = pm.environment.get("sleep");
+    else {
+        postman.setEnvironmentVariable("sleep", (milisecond) => {
+            console.log("Will sleep for " + milisecond/1000 + " seconds");
+            const date = Date.now();
+            // Sleep an amount of milliseconds given
+            while ((date + milisecond) > Date.now());
+        });
+        var sleep = pm.environment.get("sleep");
+    }
 
 
     
@@ -235,7 +248,9 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
 
 
 
-var countObjects = eval(pm.environment.get("countObjects"));
+
+
+
 
 postman.setEnvironmentVariable("diff", (obj1, obj2) => {
     const result = {};
@@ -260,12 +275,7 @@ postman.setEnvironmentVariable("diff", (obj1, obj2) => {
 });
 var diff = eval(pm.environment.get("diff"));
 
-postman.setEnvironmentVariable("sleep", (milisecond) => {
-    const date = Date.now();
-    // Sleep an amount of milliseconds given
-    while ((date + milisecond) > Date.now());
-});
-var sleep = eval(pm.environment.get("sleep"));
+
 
 postman.setEnvironmentVariable("timeDiff", (createdTime) => {
     //given time from json
