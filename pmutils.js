@@ -17,7 +17,123 @@ postman.setEnvironmentVariable("setup", () => {
     else {
         pm.environment.set("debug", false);
     }
+    if (pm.environment.has("countObjects"))
+        var countObjects = pm.environment.get("countObjects");
+    else {
+        postman.setEnvironmentVariable("countObjects", (objectName, tenantId, outputVariableName, compare, expectedChange) => {
+            var tenantId = pm.environment.get('tenantId');
+            if (expectedChange === null || expectedChange === undefined || ["increased", "decreased", "same"].indexOf(expectedChange) == -1) {
+                expectedChange = "same";
+            }
 
+
+            if (!tenantId) {
+                tenantId = "dev";
+                postman.setEnvironmentVariable("tenantId", tenantId);
+            }
+
+            if (objectName === null || objectName === undefined || objectName == "campaign") {
+                objectName = "campaign";
+                var url = pm.environment.get("campaignManagementServiceBaseUrl");
+                var suffix = "/campaigns";
+                url_address = url + suffix;
+            } else if (objectName == "company") {
+                var url = pm.environment.get("companyManagementServiceBaseUrl");
+                var suffix = "/companies";
+                url_address = url + suffix;
+            } else if (objectName == "order") {
+                var url = pm.environment.get("orderManagementServiceBaseUrl");
+                var suffix = "/insertionOrders";
+                url_address = url + suffix;
+            } else {
+                objectName = "campaign";
+                url_address = pm.environment.get("campaignManagementServiceBaseUrl") + "/campaigns";
+            }
+
+            toPrint("Determined tenantId is " + tenantId, debug, true);
+            toPrint("Determined url is " + url_address, debug, true);
+
+            var options = {
+                method: 'GET',
+                header: pm.environment.get('listHeader'),
+                url: url_address
+            };
+            if (compare == false) {
+                pm.sendRequest(options, function (error, response) {
+                    if (error) throw new Error(error);
+                    var jsonData = response.json();
+                    //var nmb_of_objects = (objectName == "campaign") ? jsonData.objects.length : (objectName == "company" || objectName == "order") ? jsonData.length : "";
+                    var nmb_of_objects = jsonData.pagination.objectCount;
+                    pm.collectionVariables.set(outputVariableName, nmb_of_objects);
+                    toPrint(outputVariableName + " " + pm.collectionVariables.get(outputVariableName), true, true);
+                });
+            } else {
+                pm.sendRequest(options, function (error, response) {
+                    if (error) throw new Error(error);
+                    var jsonData = response.json();
+                    //var nmb_of_objects = (objectName == "campaign") ? jsonData.objects.length : (objectName == "company" || objectName == "order") ? jsonData.length : "";
+                    var nmb_of_objects = jsonData.pagination.objectCount;
+                    pm.collectionVariables.set(outputVariableName, nmb_of_objects);
+                    toPrint(outputVariableName + " " + pm.collectionVariables.get(outputVariableName), true, true);
+                    if (objectName == "campaign") {
+                        if (expectedChange == "increased") {
+                            pm.test('Campaign got incremented ', function () {
+                                pm.expect(pm.collectionVariables.get("CampaignsBefore")).to.eql(pm.collectionVariables.get("CampaignsAfter") - 1);
+                            });
+                        } else if (expectedChange == "decreased") {
+                            pm.test('Campaign got decremented ', function () {
+                                pm.expect(pm.collectionVariables.get("CampaignsBefore")).to.eql(pm.collectionVariables.get("CampaignsAfter") + 1);
+                            });
+                        } else if (expectedChange == "same") {
+                            pm.test('Campaign before and after action is the same ', function () {
+                                pm.expect(pm.collectionVariables.get("CampaignsBefore")).to.eql(pm.collectionVariables.get("CampaignsAfter"));
+                            });
+                        } else {
+                            toPrint("expectedChange parameter in objectCount got unexpected and equal to " + expectedChange, true, true);
+                        }
+                    } else if (objectName == "company") {
+                        if (expectedChange == "increased") {
+                            pm.test('Company got incremented ', function () {
+                                pm.expect(pm.collectionVariables.get("CompaniesBefore")).to.eql(pm.collectionVariables.get("CompaniesAfter") - 1);
+                            });
+                        } else if (expectedChange == "decreased") {
+                            pm.test('Company got decreased.', function () {
+                                pm.expect(pm.collectionVariables.get("CompaniesBefore")).to.eql(pm.collectionVariables.get("CompaniesAfter") + 1);
+                            });
+                        } else if (expectedChange == "same") {
+                            pm.test('Company is the same before and after action. ', function () {
+                                pm.expect(pm.collectionVariables.get("CompaniesBefore")).to.eql(pm.collectionVariables.get("CompaniesAfter"));
+                            });
+                        } else {
+                            toPrint("expectedChange parameter in objectCount got unexpected and equal to " + expectedChange, true, true);
+                        }
+                    } else if (objectName == "order") {
+                        if (expectedChange == "increased") {
+                            pm.test('Order got incremented ', function () {
+                                pm.expect(pm.collectionVariables.get("OrdersBefore")).to.eql(pm.collectionVariables.get("OrdersAfter") - 1);
+                            });
+                        } else if (expectedChange == "decreased") {
+                            pm.test('Order got decremented ', function () {
+                                pm.expect(pm.collectionVariables.get("OrdersBefore")).to.eql(pm.collectionVariables.get("OrdersAfter") + 1);
+                            });
+                        } else if (expectedChange == "same") {
+                            pm.test('Order has the same number of orders before and after operation. ', function () {
+                                pm.expect(pm.collectionVariables.get("OrdersBefore")).to.eql(pm.collectionVariables.get("OrdersAfter"));
+                            });
+                        } else {
+                            toPrint("expectedChange parameter in objectCount got unexpected and equal to " + expectedChange, true, true);
+                        }
+                    } else {
+                        toPrint("unexpected objectName variable", true, true);
+                    }
+                });
+
+            }
+        });
+        var countObjects = pm.environment.get("countObjects");
+    }
+
+    var countObjects = eval(pm.environment.get("countObjects"));
     // pm.environment.has("barcodes") ? pm.environment.set("barcodes", "[{\"barcode\": \"62600963840\",\"enabled\": true, \"isUPC\": true }]");
     // pm.environment.has("chainId") ? pm.environment.set("chainId", JSON.stringify({"661250086":true}));
     // pm.environment.has("location") ? pm.environment.set("location", JSON.stringify({"14803720197":true}));
@@ -110,115 +226,7 @@ postman.setEnvironmentVariable("toPrint", (logMessage, debug, localDebug) => {
 });
 
 
-postman.setEnvironmentVariable("countObjects", (objectName, tenantId, outputVariableName, compare, expectedChange) => {
-    var tenantId = pm.environment.get('tenantId');
-    if (expectedChange === null || expectedChange === undefined || ["increased", "decreased", "same"].indexOf(expectedChange) == -1) {
-        expectedChange = "same";
-    }
 
-
-    if (!tenantId) {
-        tenantId = "dev";
-        postman.setEnvironmentVariable("tenantId", tenantId);
-    }
-
-    if (objectName === null || objectName === undefined || objectName == "campaign") {
-        objectName = "campaign";
-        var url = pm.environment.get("campaignManagementServiceBaseUrl");
-        var suffix = "/campaigns";
-        url_address = url + suffix;
-    } else if (objectName == "company") {
-        var url = pm.environment.get("companyManagementServiceBaseUrl");
-        var suffix = "/companies";
-        url_address = url + suffix;
-    } else if (objectName == "order") {
-        var url = pm.environment.get("orderManagementServiceBaseUrl");
-        var suffix = "/insertionOrders";
-        url_address = url + suffix;
-    } else {
-        objectName = "campaign";
-        url_address = pm.environment.get("campaignManagementServiceBaseUrl") + "/campaigns";
-    }
-
-    toPrint("Determined tenantId is " + tenantId, debug, true);
-    toPrint("Determined url is " + url_address, debug, true);
-
-    var options = {
-        method: 'GET',
-        header: pm.environment.get('listHeader'),
-        url: url_address
-    };
-    if (compare == false) {
-        pm.sendRequest(options, function (error, response) {
-            if (error) throw new Error(error);
-            var jsonData = response.json();
-            //var nmb_of_objects = (objectName == "campaign") ? jsonData.objects.length : (objectName == "company" || objectName == "order") ? jsonData.length : "";
-            var nmb_of_objects = jsonData.pagination.objectCount;
-            pm.collectionVariables.set(outputVariableName, nmb_of_objects);
-            toPrint(outputVariableName + " " + pm.collectionVariables.get(outputVariableName), true, true);
-        });
-    } else {
-        pm.sendRequest(options, function (error, response) {
-            if (error) throw new Error(error);
-            var jsonData = response.json();
-            //var nmb_of_objects = (objectName == "campaign") ? jsonData.objects.length : (objectName == "company" || objectName == "order") ? jsonData.length : "";
-            var nmb_of_objects = jsonData.pagination.objectCount;
-            pm.collectionVariables.set(outputVariableName, nmb_of_objects);
-            toPrint(outputVariableName + " " + pm.collectionVariables.get(outputVariableName), true, true);
-            if (objectName == "campaign") {
-                if (expectedChange == "increased") {
-                    pm.test('Campaign got incremented ', function () {
-                        pm.expect(pm.collectionVariables.get("CampaignsBefore")).to.eql(pm.collectionVariables.get("CampaignsAfter") - 1);
-                    });
-                } else if (expectedChange == "decreased") {
-                    pm.test('Campaign got decremented ', function () {
-                        pm.expect(pm.collectionVariables.get("CampaignsBefore")).to.eql(pm.collectionVariables.get("CampaignsAfter") + 1);
-                    });
-                } else if (expectedChange == "same") {
-                    pm.test('Campaign before and after action is the same ', function () {
-                        pm.expect(pm.collectionVariables.get("CampaignsBefore")).to.eql(pm.collectionVariables.get("CampaignsAfter"));
-                    });
-                } else {
-                    toPrint("expectedChange parameter in objectCount got unexpected and equal to " + expectedChange, true, true);
-                }
-            } else if (objectName == "company") {
-                if (expectedChange == "increased") {
-                    pm.test('Company got incremented ', function () {
-                        pm.expect(pm.collectionVariables.get("CompaniesBefore")).to.eql(pm.collectionVariables.get("CompaniesAfter") - 1);
-                    });
-                } else if (expectedChange == "decreased") {
-                    pm.test('Company got decreased.', function () {
-                        pm.expect(pm.collectionVariables.get("CompaniesBefore")).to.eql(pm.collectionVariables.get("CompaniesAfter") + 1);
-                    });
-                } else if (expectedChange == "same") {
-                    pm.test('Company is the same before and after action. ', function () {
-                        pm.expect(pm.collectionVariables.get("CompaniesBefore")).to.eql(pm.collectionVariables.get("CompaniesAfter"));
-                    });
-                } else {
-                    toPrint("expectedChange parameter in objectCount got unexpected and equal to " + expectedChange, true, true);
-                }
-            } else if (objectName == "order") {
-                if (expectedChange == "increased") {
-                    pm.test('Order got incremented ', function () {
-                        pm.expect(pm.collectionVariables.get("OrdersBefore")).to.eql(pm.collectionVariables.get("OrdersAfter") - 1);
-                    });
-                } else if (expectedChange == "decreased") {
-                    pm.test('Order got decremented ', function () {
-                        pm.expect(pm.collectionVariables.get("OrdersBefore")).to.eql(pm.collectionVariables.get("OrdersAfter") + 1);
-                    });
-                } else if (expectedChange == "same") {
-                    pm.test('Order has the same number of orders before and after operation. ', function () {
-                        pm.expect(pm.collectionVariables.get("OrdersBefore")).to.eql(pm.collectionVariables.get("OrdersAfter"));
-                    });
-                } else {
-                    toPrint("expectedChange parameter in objectCount got unexpected and equal to " + expectedChange, true, true);
-                }
-            } else {
-                toPrint("unexpected objectName variable", true, true);
-            }
-        });
-    }
-});
 var countObjects = eval(pm.environment.get("countObjects"));
 
 postman.setEnvironmentVariable("diff", (obj1, obj2) => {
