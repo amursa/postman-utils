@@ -1,4 +1,4 @@
-//Functions
+
 postman.setEnvironmentVariable("setup", () => {
     //modules
     const moment = require('moment');
