@@ -132,8 +132,20 @@ postman.setEnvironmentVariable("setup", () => {
         });
         var countObjects = pm.environment.get("countObjects");
     }
+    if (pm.environment.has("toPrint"))
+        var toPrint = pm.environment.get("toPrint");
+    else {
+        postman.setEnvironmentVariable("toPrint", (logMessage, debug, localDebug) => {
+            if (debug && localDebug) {
+                console.log(logMessage);
+            }
+        });
+        var toPrint = pm.environment.get("toPrint");
+    }
 
-    var countObjects = eval(pm.environment.get("countObjects"));
+
+
+    
     // pm.environment.has("barcodes") ? pm.environment.set("barcodes", "[{\"barcode\": \"62600963840\",\"enabled\": true, \"isUPC\": true }]");
     // pm.environment.has("chainId") ? pm.environment.set("chainId", JSON.stringify({"661250086":true}));
     // pm.environment.has("location") ? pm.environment.set("location", JSON.stringify({"14803720197":true}));
@@ -219,11 +231,7 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
 });
 
 
-postman.setEnvironmentVariable("toPrint", (logMessage, debug, localDebug) => {
-    if (debug && localDebug) {
-        console.log(logMessage);
-    }
-});
+
 
 
 
