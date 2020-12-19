@@ -34,7 +34,7 @@ postman.setEnvironmentVariable("setup", () => {
     postman.setEnvironmentVariable("triggerExecutorServiceUrl", "localhost:9101/trigger/executor/api/v1/triggers");
     postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
 });
-
+var setup = eval(pm.environment.get("setup"));
 postman.setEnvironmentVariable("setHeader", () => {
         pm.request.headers.add({
             key: 'X-Tenant-Id',
@@ -65,7 +65,7 @@ postman.setEnvironmentVariable("setHeader", () => {
         ]
         pm.environment.set('listHeader', listHeader);
 });
-
+var setHeader = eval(pm.environment.get("setHeader"));
 postman.setEnvironmentVariable("setOntologyParams", () => {
     let options = {
     url: pm.environment.get("adminPortalServingServiceBaseUrl") + "/legacy/v1/ontology/taxonomyNodes",
@@ -99,3 +99,4 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
         });
     });
 });
+var setOntologyParams = eval(pm.environment.get("setOntologyParams"));
