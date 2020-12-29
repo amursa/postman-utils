@@ -5,6 +5,26 @@ postman.setEnvironmentVariable("setup", () => {
     var _ = require('lodash');
     var uuid = require('uuid');
 
+
+    // pm.environment.has("barcodes") ? pm.environment.set("barcodes", "[{\"barcode\": \"62600963840\",\"enabled\": true, \"isUPC\": true }]");
+    // pm.environment.has("chainId") ? pm.environment.set("chainId", JSON.stringify({"661250086":true}));
+    // pm.environment.has("location") ? pm.environment.set("location", JSON.stringify({"14803720197":true}));
+    pm.environment.set("barcodes", "[{\"barcode\": \"62600963840\",\"enabled\": true, \"isUPC\": true }]");
+    pm.environment.set("chainId", JSON.stringify({"661250086":true}));
+    pm.environment.set("location", JSON.stringify({"14803720197":true}));
+    //Endpoints
+    postman.setEnvironmentVariable("campaignManagementServiceBaseUrl", "http://localhost:9096/campaign/v1");
+    postman.setEnvironmentVariable("adminPortalServingServiceBaseUrl", "http://localhost:9098/adminBackend");
+    postman.setEnvironmentVariable("orderManagementServiceBaseUrl", "http://localhost:9094/order/v1");
+    postman.setEnvironmentVariable("companyManagementServiceBaseUrl", "http://localhost:9090/company/v1");
+    postman.setEnvironmentVariable("triggerManagementServiceUrl", "localhost:9103/trigger/management/api/v1/triggers");
+    postman.setEnvironmentVariable("engagementsBU", "http://localhost:9095/engagement/v1");
+    postman.setEnvironmentVariable("triggerExecutorServiceUrl", "localhost:9101/trigger/executor/api/v1/triggers");
+    postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
+
+
+
+
     var initialTenantId = pm.globals.get("tenantId");
     var initialUserEmail = pm.globals.get("userEmail");
     
@@ -157,56 +177,45 @@ postman.setEnvironmentVariable("setup", () => {
         var sleep = pm.environment.get("sleep");
     }
 
-
-    
-    // pm.environment.has("barcodes") ? pm.environment.set("barcodes", "[{\"barcode\": \"62600963840\",\"enabled\": true, \"isUPC\": true }]");
-    // pm.environment.has("chainId") ? pm.environment.set("chainId", JSON.stringify({"661250086":true}));
-    // pm.environment.has("location") ? pm.environment.set("location", JSON.stringify({"14803720197":true}));
-    pm.environment.set("barcodes", "[{\"barcode\": \"62600963840\",\"enabled\": true, \"isUPC\": true }]");
-    pm.environment.set("chainId", JSON.stringify({"661250086":true}));
-    pm.environment.set("location", JSON.stringify({"14803720197":true}));
-    //Endpoints
-    postman.setEnvironmentVariable("campaignManagementServiceBaseUrl", "http://localhost:9096/campaign/v1");
-    postman.setEnvironmentVariable("adminPortalServingServiceBaseUrl", "http://localhost:9098/adminBackend");
-    postman.setEnvironmentVariable("orderManagementServiceBaseUrl", "http://localhost:9094/order/v1");
-    postman.setEnvironmentVariable("companyManagementServiceBaseUrl", "http://localhost:9090/company/v1");
-    postman.setEnvironmentVariable("triggerManagementServiceUrl", "localhost:9103/trigger/management/api/v1/triggers");
-    postman.setEnvironmentVariable("engagementsBU", "http://localhost:9095/engagement/v1");
-    postman.setEnvironmentVariable("triggerExecutorServiceUrl", "localhost:9101/trigger/executor/api/v1/triggers");
-    postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
-});
-
-
-postman.setEnvironmentVariable("setHeader", () => {
-        pm.request.headers.add({
-            key: 'X-Tenant-Id',
-            value: pm.environment.get('tenantId')
-        });
-        pm.request.headers.add({
-            key: 'X-Goog-Authenticated-User-Email',
-            value: pm.environment.get('userEmail')
-        });
-        pm.request.headers.add({
-            key: 'content-type',
-            value: 'application/json'
-        });
-        var sdk = require('postman-collection');
-        var listHeader = [
-            new sdk.Header({
+    if (pm.environment.has("setHeader"))
+        var setHeader = pm.environment.get("setHeader");
+    else{
+        postman.setEnvironmentVariable("setHeader", () => {
+            pm.request.headers.add({
                 key: 'X-Tenant-Id',
-                value: pm.environment.get("tenantId")
-            }),
-            new sdk.Header({
+                value: pm.environment.get('tenantId')
+            });
+            pm.request.headers.add({
                 key: 'X-Goog-Authenticated-User-Email',
-                value: pm.environment.get("userEmail")
-            }),
-            new sdk.Header({
+                value: pm.environment.get('userEmail')
+            });
+            pm.request.headers.add({
                 key: 'content-type',
                 value: 'application/json'
-            })
-        ]
-        pm.environment.set('listHeader', listHeader);
+            });
+            var sdk = require('postman-collection');
+            var listHeader = [
+                new sdk.Header({
+                    key: 'X-Tenant-Id',
+                    value: pm.environment.get("tenantId")
+                }),
+                new sdk.Header({
+                    key: 'X-Goog-Authenticated-User-Email',
+                    value: pm.environment.get("userEmail")
+                }),
+                new sdk.Header({
+                    key: 'content-type',
+                    value: 'application/json'
+                })
+            ]
+            pm.environment.set('listHeader', listHeader);
+        });
+        var setHeader = pm.environment.get("setHeader");
+    }
 });
+
+
+
 
 
 postman.setEnvironmentVariable("setOntologyParams", () => {
@@ -242,13 +251,6 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
         });
     });
 });
-
-
-
-
-
-
-
 
 
 
