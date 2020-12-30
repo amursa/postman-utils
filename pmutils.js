@@ -180,41 +180,39 @@ postman.setEnvironmentVariable("setup", () => {
     // postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
     // postman.setEnvironmentVariable("appServingServiceBaseUrl", "localhost:9110/app/v1");
 
-    if (pm.environment.has("setHeader"))
-        var setHeader = pm.environment.get("setHeader");
-    else{
-        postman.setEnvironmentVariable("setHeader", () => {
-            pm.request.headers.add({
+
+    postman.setEnvironmentVariable("setHeader", () => {
+        pm.request.headers.add({
+            key: 'X-Tenant-Id',
+            value: pm.environment.get('tenantId')
+        });
+        pm.request.headers.add({
+            key: 'X-Goog-Authenticated-User-Email',
+            value: pm.environment.get('userEmail')
+        });
+        pm.request.headers.add({
+            key: 'content-type',
+            value: 'application/json'
+        });
+        var sdk = require('postman-collection');
+        var listHeader = [
+            new sdk.Header({
                 key: 'X-Tenant-Id',
-                value: pm.environment.get('tenantId')
-            });
-            pm.request.headers.add({
+                value: pm.environment.get("tenantId")
+            }),
+            new sdk.Header({
                 key: 'X-Goog-Authenticated-User-Email',
-                value: pm.environment.get('userEmail')
-            });
-            pm.request.headers.add({
+                value: pm.environment.get("userEmail")
+            }),
+            new sdk.Header({
                 key: 'content-type',
                 value: 'application/json'
-            });
-            var sdk = require('postman-collection');
-            var listHeader = [
-                new sdk.Header({
-                    key: 'X-Tenant-Id',
-                    value: pm.environment.get("tenantId")
-                }),
-                new sdk.Header({
-                    key: 'X-Goog-Authenticated-User-Email',
-                    value: pm.environment.get("userEmail")
-                }),
-                new sdk.Header({
-                    key: 'content-type',
-                    value: 'application/json'
-                })
-            ]
-            pm.environment.set('listHeader', listHeader);
-        });
-        var setHeader = pm.environment.get("setHeader");
-    }
+            })
+        ]
+        pm.environment.set('listHeader', listHeader);
+    });
+    var setHeader = pm.environment.get("setHeader");
+    
 });
 
 
