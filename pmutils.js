@@ -20,8 +20,7 @@ postman.setEnvironmentVariable("setup", () => {
     var initialTenantId = pm.globals.get("tenantId");
     var initialUserEmail = pm.globals.get("userEmail");
     
-    pm.environment.clear();
-    pm.collectionVariables.clear();
+ 
     pm.environment.set("tenantId", initialTenantId);
     pm.environment.set("userEmail", initialUserEmail);
     if (pm.environment.has("debug"))
