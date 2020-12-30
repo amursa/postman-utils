@@ -21,6 +21,7 @@ postman.setEnvironmentVariable("setup", () => {
     postman.setEnvironmentVariable("engagementsBU", "http://localhost:9095/engagement/v1");
     postman.setEnvironmentVariable("triggerExecutorServiceUrl", "localhost:9101/trigger/executor/api/v1/triggers");
     postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
+    postman.setEnvironmentVariable("appServingServiceBaseUrl", "localhost:9110/app/v1");
 
 
 
