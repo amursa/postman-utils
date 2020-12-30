@@ -169,20 +169,18 @@ postman.setEnvironmentVariable("setup", () => {
         var sleep = pm.environment.get("sleep");
     }
 
-        //Endpoints
-    postman.setEnvironmentVariable("campaignManagementServiceBaseUrl", "http://localhost:9096/campaign/v1");
-    postman.setEnvironmentVariable("adminPortalServingServiceBaseUrl", "http://localhost:9098/adminBackend");
-    postman.setEnvironmentVariable("orderManagementServiceBaseUrl", "http://localhost:9094/order/v1");
-    postman.setEnvironmentVariable("companyManagementServiceBaseUrl", "http://localhost:9090/company/v1");
-    postman.setEnvironmentVariable("triggerManagementServiceUrl", "localhost:9103/trigger/management/api/v1/triggers");
-    postman.setEnvironmentVariable("engagementsBU", "http://localhost:9095/engagement/v1");
-    postman.setEnvironmentVariable("triggerExecutorServiceUrl", "localhost:9101/trigger/executor/api/v1/triggers");
-    postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
-    postman.setEnvironmentVariable("appServingServiceBaseUrl", "localhost:9110/app/v1");
-});
+    //     //Endpoints
+    // postman.setEnvironmentVariable("campaignManagementServiceBaseUrl", "http://localhost:9096/campaign/v1");
+    // postman.setEnvironmentVariable("adminPortalServingServiceBaseUrl", "http://localhost:9098/adminBackend");
+    // postman.setEnvironmentVariable("orderManagementServiceBaseUrl", "http://localhost:9094/order/v1");
+    // postman.setEnvironmentVariable("companyManagementServiceBaseUrl", "http://localhost:9090/company/v1");
+    // postman.setEnvironmentVariable("triggerManagementServiceUrl", "localhost:9103/trigger/management/api/v1/triggers");
+    // postman.setEnvironmentVariable("engagementsBU", "http://localhost:9095/engagement/v1");
+    // postman.setEnvironmentVariable("triggerExecutorServiceUrl", "localhost:9101/trigger/executor/api/v1/triggers");
+    // postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
+    // postman.setEnvironmentVariable("appServingServiceBaseUrl", "localhost:9110/app/v1");
 
-
-if (pm.environment.has("setHeader"))
+    if (pm.environment.has("setHeader"))
         var setHeader = pm.environment.get("setHeader");
     else{
         postman.setEnvironmentVariable("setHeader", () => {
@@ -217,6 +215,10 @@ if (pm.environment.has("setHeader"))
         });
         var setHeader = pm.environment.get("setHeader");
     }
+});
+
+
+
 
 
 postman.setEnvironmentVariable("setOntologyParams", () => {
