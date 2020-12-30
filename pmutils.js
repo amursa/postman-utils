@@ -178,7 +178,11 @@ postman.setEnvironmentVariable("setup", () => {
         var sleep = pm.environment.get("sleep");
     }
 
-    if (pm.environment.has("setHeader"))
+    
+});
+
+
+if (pm.environment.has("setHeader"))
         var setHeader = pm.environment.get("setHeader");
     else{
         postman.setEnvironmentVariable("setHeader", () => {
@@ -213,10 +217,6 @@ postman.setEnvironmentVariable("setup", () => {
         });
         var setHeader = pm.environment.get("setHeader");
     }
-});
-
-
-
 
 
 postman.setEnvironmentVariable("setOntologyParams", () => {
