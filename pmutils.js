@@ -9,7 +9,7 @@ postman.setEnvironmentVariable("triggerExecutorServiceUrl", "localhost:9101/trig
 postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
 postman.setEnvironmentVariable("appServingServiceBaseUrl", "localhost:9110/app/v1");
 
-pm.environment.set("debug", false);
+pm.environment.set("debug1", false);
 
 postman.setEnvironmentVariable("setup", () => {
     
