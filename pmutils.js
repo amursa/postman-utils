@@ -54,8 +54,8 @@ postman.setEnvironmentVariable("countObjects", (objectName, tenantId, outputVari
             url_address = pm.environment.get("campaignManagementServiceBaseUrl") + "/campaigns";
         }
 
-        toPrint("Determined tenantId is " + tenantId, debug, true);
-        toPrint("Determined url is " + url_address, debug, true);
+        toPrint("Determined tenantId is " + tenantId, debug);
+        toPrint("Determined url is " + url_address, debug);
 
         var options = {
             method: 'GET',
@@ -240,15 +240,15 @@ postman.setEnvironmentVariable("timeDiff", (createdTime) => {
     var parsedTime = moment(createdTime, 'YYYY-MM-DDTHH:mm:ss.SSZ').toDate();
     var correctFormat = moment(parsedTime).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
     var utcCorrectFormat = moment.utc(correctFormat).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
-    // toPrint("Parsed time is " + utcCorrectFormat, debug, true);
+    // toPrint("Parsed time is " + utcCorrectFormat, debug);
     var createdUnix = moment(utcCorrectFormat).format('x');
     //Current UTC time is calculated below
 
     var localDate = new Date();
     var timeNowUnix = moment(localDate).format('x');
     // var currentTimeUnix = parseInt(moment(localDate).format('x'));
-    // toPrint("CurrentTimeUnix " + timeNowUnix, debug, true);
-    // toPrint("createdTimeUnix " + createdUnix, debug, true);
+    // toPrint("CurrentTimeUnix " + timeNowUnix, debug);
+    // toPrint("createdTimeUnix " + createdUnix, debug);
     if ((parseInt(timeNowUnix) - parseInt(createdUnix)) < 5000) {
         return true;
     } else {
@@ -258,17 +258,17 @@ postman.setEnvironmentVariable("timeDiff", (createdTime) => {
 
 
 postman.setEnvironmentVariable("differentValue", (list, value) => {
-    toPrint("List to delete value from " + list, debug, true);
-    toPrint("Value to delete from list is  " + value, debug, true);
+    toPrint("List to delete value from " + list, debug);
+    toPrint("Value to delete from list is  " + value, debug);
     for (var i = list.length; i--;) {
         // console.log(list[i]);
         if (list[i] === value) {
             list.splice(i, 1);
-            // toPrint("Remaining list " + list, debug, true);
+            // toPrint("Remaining list " + list, debug);
         }
     }
     new_value = _.sample(list);
-    toPrint("Choosen value " + new_value, debug, true);
+    toPrint("Choosen value " + new_value, debug);
     return new_value;
 });
 var differentValue = eval(pm.environment.get("differentValue"));
@@ -278,14 +278,14 @@ postman.setEnvironmentVariable("defineVariable", (obj1, obj2, obj3) => {
     var variable = _.sample(list);
     if (Array.isArray(variable)) {
         uniqueVariable = Array.from(new Set(variable));
-        toPrint((obj3 + "  Is an array and length is " + uniqueVariable.length), debug, true);
+        toPrint((obj3 + "  Is an array and length is " + uniqueVariable.length), debug);
         pm.collectionVariables.set(obj3 + "count", variable.length);
         pm.collectionVariables.set(obj3 + "unique", uniqueVariable);
     }
     // else{
     //     console.log(obj3 + "  Is NOT an array");
     // }
-    toPrint((obj2 + JSON.stringify(variable)), debug, true);
+    toPrint((obj2 + JSON.stringify(variable)), debug);
     pm.collectionVariables.set(obj3, JSON.stringify(variable));
 });
 var defineVariable = eval(pm.environment.get("defineVariable"));
