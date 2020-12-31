@@ -215,9 +215,9 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
                 //console.log("Item is " + item);
                 ontologyIds.push(item.node.node_id);
             });
-            toPrint("List of ontologyIds is " + ontologyIds, true, true);
+            console.log("List of ontologyIds is " + ontologyIds);
             var ontologyNodeId =  _.sample(ontologyIds);
-            toPrint("Choosen ontologyNodeId " + ontologyNodeId, true, true);
+            console.log("Choosen ontologyNodeId " + ontologyNodeId);
             pm.collectionVariables.set("ontologyNodeId", JSON.stringify(ontologyNodeId));
 
 
@@ -226,7 +226,7 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
                 _.each(item.childNodes, (childitem) => {
                     ontologyKeywords.push(childitem.node_name);
                 });
-                toPrint("Choosen ontologyKeywords " + ontologyKeywords, true, true);
+                console.log("Choosen ontologyKeywords " + ontologyKeywords);
                 pm.collectionVariables.set("ontologyKeywords", JSON.stringify(ontologyKeywords));
             }
         });
