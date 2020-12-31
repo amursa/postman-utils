@@ -208,7 +208,7 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
 
     pm.sendRequest(options, function (err, response) {
         var jsonData = response.json();
-            toPrint("First Ontology Node is " + jsonData[0].node_id + " and length of the array is " + jsonData.length, debug, true);
+            toPrint("First Ontology Node is " + jsonData[0].node_id + " and length of the array is " + jsonData.length, true, true);
             var ontologyIds = [];
             var ontologyKeywords = [];
             _.each(jsonData, (item) => {
