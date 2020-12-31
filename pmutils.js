@@ -9,6 +9,15 @@ postman.setEnvironmentVariable("triggerExecutorServiceUrl", "localhost:9101/trig
 postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
 postman.setEnvironmentVariable("appServingServiceBaseUrl", "localhost:9110/app/v1");
 
+
+if (pm.environment.has("debug")){
+    var debug = pm.environment.get("debug");
+}
+else {
+    pm.environment.set("debug", true);
+}
+
+
 postman.setEnvironmentVariable("setup", () => {
     
     const moment = require('moment');
@@ -23,12 +32,7 @@ postman.setEnvironmentVariable("setup", () => {
 
 });
 
-if (pm.environment.has("debug")){
-    var debug = pm.environment.get("debug");
-}
-else {
-    pm.environment.set("debug", false);
-}
+
     
 if (pm.environment.has("countObjects")){
     var countObjects = pm.environment.get("countObjects");
@@ -208,16 +212,16 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
 
     pm.sendRequest(options, function (err, response) {
         var jsonData = response.json();
-            toPrint("First Ontology Node is " + jsonData[0].node_id + " and length of the array is " + jsonData.length, true, true);
+            // toPrint("First Ontology Node is " + jsonData[0].node_id + " and length of the array is " + jsonData.length, true, true);
             var ontologyIds = [];
             var ontologyKeywords = [];
             _.each(jsonData, (item) => {
                 //console.log("Item is " + item);
                 ontologyIds.push(item.node.node_id);
             });
-            console.log("List of ontologyIds is " + ontologyIds);
+            // console.log("List of ontologyIds is " + ontologyIds);
             var ontologyNodeId =  _.sample(ontologyIds);
-            console.log("Choosen ontologyNodeId " + ontologyNodeId);
+            // console.log("Choosen ontologyNodeId " + ontologyNodeId);
             pm.collectionVariables.set("ontologyNodeId", JSON.stringify(ontologyNodeId));
 
 
@@ -226,7 +230,7 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
                 _.each(item.childNodes, (childitem) => {
                     ontologyKeywords.push(childitem.node_name);
                 });
-                console.log("Choosen ontologyKeywords " + ontologyKeywords);
+                // console.log("Choosen ontologyKeywords " + ontologyKeywords);
                 pm.collectionVariables.set("ontologyKeywords", JSON.stringify(ontologyKeywords));
             }
         });
