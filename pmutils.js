@@ -9,14 +9,7 @@ postman.setEnvironmentVariable("triggerExecutorServiceUrl", "localhost:9101/trig
 postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
 postman.setEnvironmentVariable("appServingServiceBaseUrl", "localhost:9110/app/v1");
 
-
-if (pm.environment.has("debug")){
-    var debug = pm.environment.get("debug");
-}
-else {
-    pm.environment.set("debug", true);
-}
-
+pm.environment.set("debug", true);
 
 postman.setEnvironmentVariable("setup", () => {
     
@@ -29,16 +22,9 @@ postman.setEnvironmentVariable("setup", () => {
     
     pm.environment.set("tenantId", initialTenantId);
     pm.environment.set("userEmail", initialUserEmail);
-
 });
-
-
     
-if (pm.environment.has("countObjects")){
-    var countObjects = pm.environment.get("countObjects");
-}
-else {
-    postman.setEnvironmentVariable("countObjects", (objectName, tenantId, outputVariableName, compare, expectedChange) => {
+postman.setEnvironmentVariable("countObjects", (objectName, tenantId, outputVariableName, compare, expectedChange) => {
         var tenantId = pm.environment.get('tenantId');
         if (expectedChange === null || expectedChange === undefined || ["increased", "decreased", "same"].indexOf(expectedChange) == -1) {
             expectedChange = "same";
@@ -147,29 +133,20 @@ else {
             });
 
         }
-    });
-}
-    
-if (pm.environment.has("toPrint"))
-    var toPrint = pm.environment.get("toPrint");
-else {
-    postman.setEnvironmentVariable("toPrint", (logMessage, debug, localDebug) => {
-        if (debug && localDebug) {
-            console.log(logMessage);
-        }
-    });
-}
+});
 
-if (pm.environment.has("sleep"))
-    var sleep = pm.environment.get("sleep");
-else {
-    postman.setEnvironmentVariable("sleep", (milisecond) => {
-        console.log("Will sleep for " + milisecond/1000 + " seconds");
-        const date = Date.now();
-        // Sleep an amount of milliseconds given
-        while ((date + milisecond) > Date.now());
-    });
-}
+postman.setEnvironmentVariable("toPrint", (logMessage, debug) => {
+    if (debug){
+        console.log(logMessage);
+    }
+});
+
+postman.setEnvironmentVariable("sleep", (milisecond) => {
+    console.log("Will sleep for " + milisecond/1000 + " seconds");
+    const date = Date.now();
+    // Sleep an amount of milliseconds given
+    while ((date + milisecond) > Date.now());
+});
 
 postman.setEnvironmentVariable("setHeader", () => {
     pm.request.headers.add({
@@ -201,7 +178,6 @@ postman.setEnvironmentVariable("setHeader", () => {
     ]
     pm.environment.set('listHeader', listHeader);
 });
-
 
 postman.setEnvironmentVariable("setOntologyParams", () => {
     let options = {
@@ -237,8 +213,6 @@ postman.setEnvironmentVariable("setOntologyParams", () => {
     });
 });
 
-
-
 postman.setEnvironmentVariable("diff", (obj1, obj2) => {
     const result = {};
     if (Object.is(obj1, obj2)) {
@@ -260,9 +234,6 @@ postman.setEnvironmentVariable("diff", (obj1, obj2) => {
     });
     return result;
 });
-var diff = eval(pm.environment.get("diff"));
-
-
 
 postman.setEnvironmentVariable("timeDiff", (createdTime) => {
     //given time from json
@@ -284,7 +255,7 @@ postman.setEnvironmentVariable("timeDiff", (createdTime) => {
         return false;
     }
 });
-var timeDiff = eval(pm.environment.get("timeDiff"));
+
 
 postman.setEnvironmentVariable("differentValue", (list, value) => {
     toPrint("List to delete value from " + list, debug, true);
