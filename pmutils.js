@@ -1,4 +1,4 @@
-//Endpoints1
+//Endpoints
 postman.setEnvironmentVariable("campaignManagementServiceBaseUrl", "http://localhost:9096/campaign/v1");
 postman.setEnvironmentVariable("adminPortalServingServiceBaseUrl", "http://localhost:9098/adminBackend");
 postman.setEnvironmentVariable("orderManagementServiceBaseUrl", "http://localhost:9094/order/v1");
@@ -9,7 +9,7 @@ postman.setEnvironmentVariable("triggerExecutorServiceUrl", "localhost:9101/trig
 postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
 postman.setEnvironmentVariable("appServingServiceBaseUrl", "localhost:9110/app/v1");
 
-pm.environment.set("debug1", false);
+pm.environment.set("debug", true);
 
 postman.setEnvironmentVariable("setup", () => {
     
