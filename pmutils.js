@@ -240,22 +240,22 @@ postman.setEnvironmentVariable("timeDiff", (createdTime) => {
     var parsedTime = moment(createdTime, 'YYYY-MM-DDTHH:mm:ss.SSZ').toDate();
     var correctFormat = moment(parsedTime).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
     var utcCorrectFormat = moment.utc(correctFormat).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
-    // toPrint("Parsed time is " + utcCorrectFormat, debug);
+    toPrint("Parsed time is " + utcCorrectFormat, true, true);
     var createdUnix = moment(utcCorrectFormat).format('x');
     //Current UTC time is calculated below
 
     var localDate = new Date();
     var timeNowUnix = moment(localDate).format('x');
-    // var currentTimeUnix = parseInt(moment(localDate).format('x'));
-    // toPrint("CurrentTimeUnix " + timeNowUnix, debug);
-    // toPrint("createdTimeUnix " + createdUnix, debug);
+    var currentTimeUnix = parseInt(moment(localDate).format('x'));
+    toPrint("CurrentTimeUnix " + timeNowUnix, debug);
+    toPrint("createdTimeUnix " + createdUnix, debug);
     if ((parseInt(timeNowUnix) - parseInt(createdUnix)) < 5000) {
+        console.log("time difference is " + (parseInt(timeNowUnix) - parseInt(createdUnix)));
         return true;
     } else {
         return false;
     }
 });
-
 
 postman.setEnvironmentVariable("differentValue", (list, value) => {
     toPrint("List to delete value from " + list, debug);
@@ -271,7 +271,6 @@ postman.setEnvironmentVariable("differentValue", (list, value) => {
     toPrint("Choosen value " + new_value, debug);
     return new_value;
 });
-var differentValue = eval(pm.environment.get("differentValue"));
 
 postman.setEnvironmentVariable("defineVariable", (obj1, obj2, obj3) => {
     var list = obj1;
@@ -288,14 +287,12 @@ postman.setEnvironmentVariable("defineVariable", (obj1, obj2, obj3) => {
     toPrint((obj2 + JSON.stringify(variable)), debug);
     pm.collectionVariables.set(obj3, JSON.stringify(variable));
 });
-var defineVariable = eval(pm.environment.get("defineVariable"));
 
 postman.setEnvironmentVariable("isValidURL", (string) => {
     var res = string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
     //console.log("isValidURL returns " + res);
     return (res !== null);
 });
-var isValidURL = eval(pm.environment.get("isValidURL"));
 
 postman.setEnvironmentVariable("setInsertionLineItems", (obj) => {
     toPrint("List length is " + obj.length, true, true);
@@ -346,5 +343,3 @@ postman.setEnvironmentVariable("setInsertionLineItems", (obj) => {
         //     console.log("Value contains unexpected input");
         // }   
 });
-var setInsertionLineItems = eval(pm.environment.get("setInsertionLineItems"));
-
