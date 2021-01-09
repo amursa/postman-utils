@@ -240,17 +240,19 @@ postman.setEnvironmentVariable("timeDiff", (createdTime) => {
     var parsedTime = moment(createdTime, 'YYYY-MM-DDTHH:mm:ss.SSZ').toDate();
     var correctFormat = moment(parsedTime).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
     var utcCorrectFormat = moment.utc(correctFormat).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
-    toPrint("Parsed time is " + utcCorrectFormat, true, true);
+    toPrint("GIVEN TIME  is: " + utcCorrectFormat, true);
     var createdUnix = moment(utcCorrectFormat).format('x');
+
     //Current UTC time is calculated below
 
     var localDate = new Date();
+    console.log("CURRENT TIME is: " + moment.utc(localDate).format('YYYY-MM-DDTHH:mm:ss.SSSZ'))
     var timeNowUnix = moment(localDate).format('x');
     var currentTimeUnix = parseInt(moment(localDate).format('x'));
     toPrint("CurrentTimeUnix " + timeNowUnix, debug);
     toPrint("createdTimeUnix " + createdUnix, debug);
     if ((parseInt(timeNowUnix) - parseInt(createdUnix)) < 5000) {
-        console.log("time difference is " + (parseInt(timeNowUnix) - parseInt(createdUnix)));
+        console.log("time difference is under treshold of 5 seconds");
         return true;
     } else {
         return false;
