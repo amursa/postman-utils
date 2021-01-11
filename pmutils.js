@@ -11,7 +11,7 @@ postman.setEnvironmentVariable("appServingServiceBaseUrl", "localhost:9110/app/v
 
 
 postman.setEnvironmentVariable("campaignProxy", "localhost:9098/services/campaign/v1");
-postman.setEnvironmentVariable("orderProxy", "localhost:9098/services/campaign/v1");
+postman.setEnvironmentVariable("orderProxy", "localhost:9098/services/order/v1");
 postman.setEnvironmentVariable("companyProxy", "localhost:9098/services/company/v1");
 
 
