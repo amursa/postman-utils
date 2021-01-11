@@ -9,6 +9,12 @@ postman.setEnvironmentVariable("triggerExecutorServiceUrl", "localhost:9101/trig
 postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
 postman.setEnvironmentVariable("appServingServiceBaseUrl", "localhost:9110/app/v1");
 
+
+postman.setEnvironmentVariable("campaignProxy", "localhost:9098/services/campaign/v1");
+postman.setEnvironmentVariable("orderProxy", "localhost:9098/services/campaign/v1");
+postman.setEnvironmentVariable("companyProxy", "localhost:9098/services/company/v1");
+
+
 pm.environment.set("debug", true);
 
 postman.setEnvironmentVariable("setup", () => {
