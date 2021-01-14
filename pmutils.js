@@ -256,7 +256,7 @@ postman.setEnvironmentVariable("timeDiff", (createdTime) => {
     var currentTimeUnix = parseInt(moment(localDate).format('x'));
    
     if ((parseInt(timeNowUnix) - parseInt(createdUnix)) < 30000) {
-        console.log("time difference is under treshold of 5 seconds");
+        console.log("time difference is under treshold of 30 seconds");
         return true;
     } else {
         console.log("GIVEN TIME  is: " + utcCorrectFormat);
