@@ -354,3 +354,7 @@ postman.setEnvironmentVariable("setInsertionLineItems", (obj) => {
         //     console.log("Value contains unexpected input");
         // }   
 });
+
+postman.setEnvironmentVariable("randomInteger", (min, max)=>{
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+});
