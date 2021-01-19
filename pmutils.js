@@ -30,6 +30,17 @@ postman.setEnvironmentVariable("setup", () => {
     
     pm.environment.set("tenantId", initialTenantId);
     pm.environment.set("userEmail", initialUserEmail);
+}); 
+// Usage: given array , find by key=value the order element and return the value of a certain another key value from the same element of the array.
+// tests["Start and End dates are the same"] = findObjectByKey(pm.response.json().constraints, "@type", "DateRangeConstraint", "startTimestamp") 
+// === findObjectByKey(pm.response.json().constraints, "@type", "DateRangeConstraint", "endTimestamp");
+postman.setEnvironmentVariable("findObjectByKey", (array, key, value, returnkeyvalue) => {
+    for (var i = 0; i < array.length; i++) {
+        if (array[i][key] === value) {
+            return array[i][returnkeyvalue];
+        }
+    }
+    return null;
 });
     
 postman.setEnvironmentVariable("countObjects", (objectName, tenantId, outputVariableName, compare, expectedChange) => {
