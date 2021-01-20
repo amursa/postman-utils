@@ -31,6 +31,26 @@ postman.setEnvironmentVariable("setup", () => {
     pm.environment.set("tenantId", initialTenantId);
     pm.environment.set("userEmail", initialUserEmail);
 }); 
+
+postman.setEnvironmentVariable("functions", ()  => {
+    //Functions -------------------
+    setHeader = eval(pm.environment.get("setHeader"));
+    setHeader();
+    randomInteger = eval(pm.environment.get("randomInteger"));
+    findObjectByKey = eval(pm.environment.get("findObjectByKey"));
+    diff = eval(pm.environment.get("diff"));
+    sleep = eval(pm.environment.get("sleep"));
+    timeDiff = eval(pm.environment.get("timeDiff"));
+    differentValue = eval(pm.environment.get("differentValue"));
+    toPrint = eval(pm.environment.get("toPrint"));
+    countObjects = eval(pm.environment.get("countObjects"));
+    defineVariable = eval(pm.environment.get("defineVariable"));
+    setInsertionLineItems = eval(pm.environment.get("setInsertionLineItems"));
+    isValidURL = eval(pm.environment.get("isValidURL"));
+    //------------------END functions----------------------
+});
+
+
 // Usage: given array , find by key=value the order element and return the value of a certain another key value from the same element of the array.
 // tests["Start and End dates are the same"] = findObjectByKey(pm.response.json().constraints, "@type", "DateRangeConstraint", "startTimestamp") 
 // === findObjectByKey(pm.response.json().constraints, "@type", "DateRangeConstraint", "endTimestamp");
