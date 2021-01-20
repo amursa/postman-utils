@@ -34,8 +34,8 @@ postman.setEnvironmentVariable("setup", () => {
 
 postman.setEnvironmentVariable("functions", ()  => {
     //Functions -------------------
-    setHeader = eval(pm.environment.get("setHeader"));
-    setHeader();
+    // setHeader = eval(pm.environment.get("setHeader"));
+    // setHeader();
     randomInteger = eval(pm.environment.get("randomInteger"));
     findObjectByKey = eval(pm.environment.get("findObjectByKey"));
     diff = eval(pm.environment.get("diff"));
