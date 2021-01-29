@@ -49,6 +49,19 @@ postman.setEnvironmentVariable("functions", ()  => {
     //------------------END functions----------------------
 });
 
+postman.setEnvironmentVariable("verifyGetAdId_CMS_ASS", () => {
+    let options = {
+    url: pm.environment.get("adServingServiceBaseUrl") + "/ads/" + pm.collectionVariable("lastAdId"),
+    method: 'GET',
+    header: pm.environment.get('listHeader'),
+    };
+
+    pm.sendRequest(options, function (err, response) {
+        pm.test("Response is 200", function() {
+            pm.response.to.have.status(200);
+        });
+    });
+});
 
 // Usage: given array , find by key=value the order element and return the value of a certain another key value from the same element of the array.
 // tests["Start and End dates are the same"] = findObjectByKey(pm.response.json().constraints, "@type", "DateRangeConstraint", "startTimestamp") 
