@@ -46,6 +46,7 @@ postman.setEnvironmentVariable("functions", ()  => {
     defineVariable = eval(pm.environment.get("defineVariable"));
     setInsertionLineItems = eval(pm.environment.get("setInsertionLineItems"));
     isValidURL = eval(pm.environment.get("isValidURL"));
+    verifyASSHasGetAdId = eval(pm.environment.get("verifyGetAdId_CMS_ASS"));
     //------------------END functions----------------------
 });
 
