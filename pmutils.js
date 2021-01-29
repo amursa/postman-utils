@@ -52,7 +52,7 @@ postman.setEnvironmentVariable("functions", ()  => {
 
 postman.setEnvironmentVariable("verifyGetAdId_CMS_ASS", () => {
     let options = {
-    url: pm.environment.get("adServingServiceBaseUrl") + "/ads/" + pm.collectionVariable("lastAdId"),
+    url: pm.environment.get("adServingServiceBaseUrl") + "/ads/" + pm.collectionVariable.get("lastAdId"),
     method: 'GET',
     header: pm.environment.get('listHeader'),
     };
