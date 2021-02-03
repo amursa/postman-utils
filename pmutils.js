@@ -68,8 +68,13 @@ postman.setEnvironmentVariable("functions", ()  => {
 // tests["Start and End dates are the same"] = findObjectByKey(pm.response.json().constraints, "@type", "DateRangeConstraint", "startTimestamp") 
 // === findObjectByKey(pm.response.json().constraints, "@type", "DateRangeConstraint", "endTimestamp");
 postman.setEnvironmentVariable("findObjectByKey", (array, key, value, returnkeyvalue) => {
+    console.log("Array is " + array);
+
     for (var i = 0; i < array.length; i++) {
+        console.log(array[i][key]);
+        console.log("Looking for value " + value);
         if (array[i][key] === value) {
+            console.log("Found value " + array[i][returnkeyvalue]);
             return array[i][returnkeyvalue];
         }
     }
