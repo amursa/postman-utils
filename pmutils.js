@@ -6,9 +6,6 @@ postman.setEnvironmentVariable("triggerExecutorServiceUrl", "localhost:9101/trig
 postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1");
 postman.setEnvironmentVariable("appServingServiceBaseUrl", "localhost:9110/app/v1");
 postman.setEnvironmentVariable("nodeDefManagementServiceBaseUrl", "localhost:9106/node/v1");
-
-
-
 postman.setEnvironmentVariable("campaignManagementServiceBaseUrl", "http://localhost:9096/campaign/v1");
 postman.setEnvironmentVariable("orderManagementServiceBaseUrl", "http://localhost:9094/order/v1");
 postman.setEnvironmentVariable("companyManagementServiceBaseUrl", "http://localhost:9090/company/v1");
@@ -49,20 +46,6 @@ postman.setEnvironmentVariable("functions", ()  => {
     // verifyASSHasGetAdId = eval(pm.environment.get("verifyGetAdId_CMS_ASS"));
     //------------------END functions----------------------
 });
-
-// postman.setEnvironmentVariable("verifyGetAdId_CMS_ASS", () => {
-//     let options = {
-//     url: pm.environment.get("adServingServiceBaseUrl") + "/ads/" + pm.collectionVariable.get("lastAdId"),
-//     method: 'GET',
-//     header: pm.environment.get('listHeader'),
-//     };
-
-//     pm.sendRequest(options, function (err, response) {
-//         pm.test("Response is 200", function() {
-//             pm.response.to.have.status(200);
-//         });
-//     });
-// });
 
 // Usage: given array , find by key=value the order element and return the value of a certain another key value from the same element of the array.
 // tests["Start and End dates are the same"] = findObjectByKey(pm.response.json().constraints, "@type", "DateRangeConstraint", "startTimestamp") 
@@ -355,7 +338,7 @@ postman.setEnvironmentVariable("isValidURL", (string) => {
 });
 
 postman.setEnvironmentVariable("setInsertionLineItems", (obj) => {
-    toPrint("List length is " + obj.length, true, true);
+    toPrint("List length is " + obj.length, true);
     obj.forEach((item) => { 
         Object.entries(item).forEach(([key, val]) => {
             console.log(`key-${key}-val-${val}`);
@@ -404,6 +387,50 @@ postman.setEnvironmentVariable("setInsertionLineItems", (obj) => {
         // }   
 });
 
-postman.setEnvironmentVariable("randomInteger", (min, max)=>{
+postman.setEnvironmentVariable("randomInteger", (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 });
+
+
+//usage getCampaignTime(10, 'm',2, 'h',true);
+//Time Key Shortcuts: 
+// Key                Shorthand
+// years            y
+// quarters         Q
+// months           M
+// weeks            w
+// days             d
+// hours            h
+// minutes          m
+// seconds          s
+// milliseconds     ms
+postman.setEnvironmentVariable("getCampaignTime", (startIncrement, startTimeKey, endIncrement, endTimeKey, showdebug) => {
+    const startTime = moment();
+    var endTime = moment();
+    endTime = endTime.add(2,'h');
+    toPrint("---------------------------------Current time " + startTime.toISOString() + " end Time " + endTime.toISOString(), showdebug);
+    pm.collectionVariables.set("startTime", JSON.stringify(startTime.toISOString()));
+    pm.collectionVariables.set("endTime", JSON.stringify(endTime.toISOString()));
+
+    var startTimeFuture = startTime.add(startIncrement, startTimeKey);
+    var endTimeFuture = endTime.add(endIncrement, endTimeKey);
+    toPrint("---------------------------------Future Start time " + startTimeFuture.toISOString(), showdebug);
+    toPrint("---------------------------------Future Start time " + endTimeFuture.toISOString(), showdebug);
+    pm.collectionVariables.set("startTimeFuture", JSON.stringify(startTimeFuture.toISOString()));
+    pm.collectionVariables.set("endTimeFuture",JSON.stringify(endTimeFuture.toISOString()));
+});
+
+
+// postman.setEnvironmentVariable("verifyGetAdId_CMS_ASS", () => {
+//     let options = {
+//     url: pm.environment.get("adServingServiceBaseUrl") + "/ads/" + pm.collectionVariable.get("lastAdId"),
+//     method: 'GET',
+//     header: pm.environment.get('listHeader'),
+//     };
+
+//     pm.sendRequest(options, function (err, response) {
+//         pm.test("Response is 200", function() {
+//             pm.response.to.have.status(200);
+//         });
+//     });
+// });
