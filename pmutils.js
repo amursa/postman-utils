@@ -32,6 +32,7 @@ postman.setEnvironmentVariable("setup", () => {
 
 postman.setEnvironmentVariable("functions", ()  => {
     //Functions -------------------
+    getCampaignTime = eval(pm.environment.get("getCampaignTime"));
     randomInteger = eval(pm.environment.get("randomInteger"));
     findObjectByKey = eval(pm.environment.get("findObjectByKey"));
     diff = eval(pm.environment.get("diff"));
@@ -46,6 +47,35 @@ postman.setEnvironmentVariable("functions", ()  => {
     // verifyASSHasGetAdId = eval(pm.environment.get("verifyGetAdId_CMS_ASS"));
     //------------------END functions----------------------
 });
+
+//usage getCampaignTime(10, 'm',2, 'h',true);
+//Time Key Shortcuts: 
+// Key                Shorthand
+// years            y
+// quarters         Q
+// months           M
+// weeks            w
+// days             d
+// hours            h
+// minutes          m
+// seconds          s
+// milliseconds     ms
+postman.setEnvironmentVariable("getCampaignTime", (startIncrement, startTimeKey, endIncrement, endTimeKey, showdebug) => {
+    const startTime = moment();
+    var endTime = moment();
+    endTime = endTime.add(2,'h');
+    toPrint("---------------------------------Current time " + startTime.toISOString() + " end Time " + endTime.toISOString(), showdebug);
+    pm.collectionVariables.set("startTime", JSON.stringify(startTime.toISOString()));
+    pm.collectionVariables.set("endTime", JSON.stringify(endTime.toISOString()));
+
+    var startTimeFuture = startTime.add(startIncrement, startTimeKey);
+    var endTimeFuture = endTime.add(endIncrement, endTimeKey);
+    toPrint("---------------------------------Future Start time " + startTimeFuture.toISOString(), showdebug);
+    toPrint("---------------------------------Future Start time " + endTimeFuture.toISOString(), showdebug);
+    pm.collectionVariables.set("startTimeFuture", JSON.stringify(startTimeFuture.toISOString()));
+    pm.collectionVariables.set("endTimeFuture",JSON.stringify(endTimeFuture.toISOString()));
+});
+
 
 // Usage: given array , find by key=value the order element and return the value of a certain another key value from the same element of the array.
 // tests["Start and End dates are the same"] = findObjectByKey(pm.response.json().constraints, "@type", "DateRangeConstraint", "startTimestamp") 
@@ -392,33 +422,7 @@ postman.setEnvironmentVariable("randomInteger", (min, max) => {
 });
 
 
-//usage getCampaignTime(10, 'm',2, 'h',true);
-//Time Key Shortcuts: 
-// Key                Shorthand
-// years            y
-// quarters         Q
-// months           M
-// weeks            w
-// days             d
-// hours            h
-// minutes          m
-// seconds          s
-// milliseconds     ms
-postman.setEnvironmentVariable("getCampaignTime", (startIncrement, startTimeKey, endIncrement, endTimeKey, showdebug) => {
-    const startTime = moment();
-    var endTime = moment();
-    endTime = endTime.add(2,'h');
-    toPrint("---------------------------------Current time " + startTime.toISOString() + " end Time " + endTime.toISOString(), showdebug);
-    pm.collectionVariables.set("startTime", JSON.stringify(startTime.toISOString()));
-    pm.collectionVariables.set("endTime", JSON.stringify(endTime.toISOString()));
 
-    var startTimeFuture = startTime.add(startIncrement, startTimeKey);
-    var endTimeFuture = endTime.add(endIncrement, endTimeKey);
-    toPrint("---------------------------------Future Start time " + startTimeFuture.toISOString(), showdebug);
-    toPrint("---------------------------------Future Start time " + endTimeFuture.toISOString(), showdebug);
-    pm.collectionVariables.set("startTimeFuture", JSON.stringify(startTimeFuture.toISOString()));
-    pm.collectionVariables.set("endTimeFuture",JSON.stringify(endTimeFuture.toISOString()));
-});
 
 
 // postman.setEnvironmentVariable("verifyGetAdId_CMS_ASS", () => {
