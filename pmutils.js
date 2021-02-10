@@ -367,54 +367,35 @@ postman.setEnvironmentVariable("isValidURL", (string) => {
     return (res !== null);
 });
 
-postman.setEnvironmentVariable("setInsertionLineItems", (obj) => {
-    toPrint("List length is " + obj.length, true);
-    obj.forEach((item) => { 
-        Object.entries(item).forEach(([key, val]) => {
-            console.log(`key-${key}-val-${val}`);
-            //orderLineItemType = [SCAN, VIDEO, LOOKBOOK, SCAN_MISSION, PURCHASE_VALIDATION, BRANDED_COLLECTION, OTT, PROMO_UNIT, CONSUMER_RESEARCH_SURVEY, CREATIVE_DEVELOPMENT, PUSH_NOTIFICATION_FEE, INSTANT_SURPRISE] 
-            if (key == "PROMO_UNIT"){
-                    console.log("We have to create a banner OrderLineItem"); 
-                    let orderLineItemjson = [{"orderLineItemType": "PROMO_UNIT", "description": "Banner description"}];    
-            } else if (key == "SCAN"){
-                    console.log("We have to create a banner OrderLineItem");
-            }else if (key == "VIDEO"){
-                    console.log("We have to create a banner OrderLineItem");
-            }else if (key == "LOOKBOOK"){
-                    console.log("We have to create a banner OrderLineItem");
-            }else if (key == "SCAN_MISSION"){
-                    console.log("We have to create a banner OrderLineItem");
-            }else if (key == "PURCHASE_VALIDATION"){
-                    console.log("We have to create a banner OrderLineItem");
-            }else if (key == "BRANDED_COLLECTION"){
-                    console.log("We have to create a banner OrderLineItem");
-            }else if (key == "OTT"){
-                    console.log("We have to create a banner OrderLineItem");
-            }else if (key == "CONSUMER_RESEARCH_SURVEY"){
-                    console.log("We have to create a banner OrderLineItem");
-            }else if (key == "CREATIVE_DEVELOPMENT"){
-                    console.log("We have to create a banner OrderLineItem");
-            }else if (key == "PUSH_NOTIFICATION_FEE"){
-                    console.log("We have to create a banner OrderLineItem");
-            }else if (key == "INSTANT_SURPRISE"){
-                    console.log("We have to create a banner OrderLineItem");
-            }else {
-                alert("ALERT:Undefined InsertionLineItem given")
-            }
-        });
-    });
-      
-        
-        // if(obj[key]=="PROMO_UNIT"){
-        //     console.log("PROMO_UNIT is provided")
-        // }
-        // if(obj[value]=="FreePricingModel"){
-        //     console.log("PRICING MODEL FreePricing Model is provided");
-        // } else if (obj[value] == "FlatFee") {
-        //     console.log("PRICING MODEL Flat fee is provided");
-        // } else {
-        //     console.log("Value contains unexpected input");
-        // }   
+postman.setEnvironmentVariable("appss_Check", (adId, userId, canUserEngage, userEngaged) => {
+    let options2 = {
+            url: pm.environment.get("appServingServiceBaseUrl") + "/ads",
+            method: 'POST',
+            header: [{key: 'X-Tenant-Id', value: pm.environment.get("tenantId")},
+                    {key: 'X-Goog-Authenticated-User-Email', value: pm.environment.get("userEmail")},
+                    {key: 'content-type', value: 'application/json'},
+                    {key: 'X-User-Id', value: userId}],
+
+                body: {
+                    mode: 'raw',
+                    raw: JSON.stringify({
+                        "chainIds": [JSON.parse(pm.environment.get("chainId"))],
+                        "locationIds": [JSON.parse(pm.environment.get("location"))],
+                        "adIds": [adId]
+                    })
+                }
+            };
+            pm.sendRequest(options2, function (error, response) {
+                if (error) {
+                    console.log(error);
+                } else {
+                console.log(response.code);
+                pm.expect(response).to.have.property('code', 200);
+                tests["Number of returned ads is 1"] = pm.response.json().objects.length === 1;
+                tests["Scan userEnagged is " + userEngaged] = pm.response.json().objects[0].userEngaged  === userEngaged;
+                tests["Scan canUserEngage is " + canUserEngage] = pm.response.json().objects[0].canUserEngage  === canUserEngage;
+                }
+            });
 });
 
 postman.setEnvironmentVariable("randomInteger", (min, max) => {
