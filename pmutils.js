@@ -7,11 +7,11 @@ postman.setEnvironmentVariable("adServingServiceBaseUrl", "localhost:9100/ad/v1"
 postman.setEnvironmentVariable("appServingServiceBaseUrl", "localhost:9110/app/v1");
 postman.setEnvironmentVariable("nodeDefManagementServiceBaseUrl", "localhost:9106/node/v1");
 postman.setEnvironmentVariable("campaignManagementServiceBaseUrl", "http://localhost:9096/campaign/v1");
-postman.setEnvironmentVariable("orderManagementServiceBaseUrl", "http://localhost:9094/order/v1");
+// postman.setEnvironmentVariable("orderManagementServiceBaseUrl", "http://localhost:9094/order/v1");
 postman.setEnvironmentVariable("companyManagementServiceBaseUrl", "http://localhost:9090/company/v1");
 
 // postman.setEnvironmentVariable("campaignManagementServiceBaseUrl", "localhost:9098/services/campaign/v1");
-// postman.setEnvironmentVariable("orderManagementServiceBaseUrl", "localhost:9098/services/order/v1");
+postman.setEnvironmentVariable("orderManagementServiceBaseUrl", "localhost:9098/services/order/v1");
 // postman.setEnvironmentVariable("companyManagementServiceBaseUrl", "localhost:9098/services/company/v1");
 
 
