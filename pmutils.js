@@ -403,8 +403,8 @@ postman.setEnvironmentVariable("randomInteger", (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 });
 
-postman.setEnvironmentVariable("removeItem", (array, item) =>{
-   return array.filter(item => item.indexOf(item) === -1 )
+postman.setEnvironmentVariable("removeItem", (array, toRemove) =>{
+   return array.filter(item => toRemove.indexOf(item) === -1 )
 });
 
 // postman.setEnvironmentVariable("verifyGetAdId_CMS_ASS", () => {
