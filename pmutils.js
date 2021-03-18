@@ -45,6 +45,7 @@ postman.setEnvironmentVariable("functions", ()  => {
     setInsertionLineItems = eval(pm.environment.get("setInsertionLineItems"));
     removeItem = eval(pm.environment.get("removeItem"));
     isValidURL = eval(pm.environment.get("isValidURL"));
+    getRandom = eval(pm.environment.get("getRandom"));
     // verifyASSHasGetAdId = eval(pm.environment.get("verifyGetAdId_CMS_ASS"));
     //------------------END functions----------------------
 });
@@ -405,6 +406,21 @@ postman.setEnvironmentVariable("randomInteger", (min, max) => {
 
 postman.setEnvironmentVariable("removeItem", (array, toRemove) =>{
    return array.filter(item => toRemove.indexOf(item) === -1 )
+});
+
+postman.setEnvironmentVariable("getRandom", (arr, n) => {
+    var result = new Array(n),
+    len = arr.length,
+    taken = new Array(len);
+    if (n > len) {
+        throw new RangeError("getRandom: more elements taken than available");  
+    }
+    while(n--) {
+        var x = Math.floor(Math.random() * len);
+        result[n] = arr[x in taken ? taken[x] : x];
+        taken[x] = --len in taken ? taken[len] : len;
+    }
+    return result
 });
 
 // postman.setEnvironmentVariable("verifyGetAdId_CMS_ASS", () => {
