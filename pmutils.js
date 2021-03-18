@@ -43,6 +43,7 @@ postman.setEnvironmentVariable("functions", ()  => {
     countObjects = eval(pm.environment.get("countObjects"));
     defineVariable = eval(pm.environment.get("defineVariable"));
     setInsertionLineItems = eval(pm.environment.get("setInsertionLineItems"));
+    removeItem = eval(pm.environment.get("removeItem"));
     isValidURL = eval(pm.environment.get("isValidURL"));
     // verifyASSHasGetAdId = eval(pm.environment.get("verifyGetAdId_CMS_ASS"));
     //------------------END functions----------------------
@@ -402,7 +403,14 @@ postman.setEnvironmentVariable("randomInteger", (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 });
 
-
+postman.setEnvironmentVariable("removeItem", (array, item) =>{
+    for(var i in array){
+        if(array[i]==item){
+            array.splice(i, 1);
+            break;
+        }
+    }
+});
 
 
 
