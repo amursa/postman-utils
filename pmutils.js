@@ -404,12 +404,7 @@ postman.setEnvironmentVariable("randomInteger", (min, max) => {
 });
 
 postman.setEnvironmentVariable("removeItem", (array, item) =>{
-    for(var i in array){
-        if(array[i]==item){
-            array.splice(i, 1);
-            break;
-        }
-    }
+   return array.filter(item => item.indexOf(item) === -1 )
 });
 
 // postman.setEnvironmentVariable("verifyGetAdId_CMS_ASS", () => {
