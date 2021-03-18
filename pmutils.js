@@ -412,8 +412,6 @@ postman.setEnvironmentVariable("removeItem", (array, item) =>{
     }
 });
 
-
-
 // postman.setEnvironmentVariable("verifyGetAdId_CMS_ASS", () => {
 //     let options = {
 //     url: pm.environment.get("adServingServiceBaseUrl") + "/ads/" + pm.collectionVariable.get("lastAdId"),
