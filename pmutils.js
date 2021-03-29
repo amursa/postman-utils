@@ -66,7 +66,7 @@ postman.setEnvironmentVariable("functions", ()  => {
 postman.setEnvironmentVariable("getCampaignTime", (startIncrement, startTimeKey, endIncrement, endTimeKey, showdebug) => {
     const startTime = moment();
     var endTime = moment();
-    // endTime = endTime.add(2,'h');
+    endTime = endTime.add(2,'d');
     toPrint("---------------------------------Current time " + startTime.toISOString() + " end Time " + endTime.toISOString(), showdebug);
     pm.collectionVariables.set("startTime", JSON.stringify(startTime.toISOString()));
     pm.collectionVariables.set("endTime", JSON.stringify(endTime.toISOString()));
