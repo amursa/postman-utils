@@ -428,7 +428,7 @@ postman.setEnvironmentVariable("getRandom", (arr, n) => {
 postman.setEnvironmentVariable("addToArray", (arrayName, value) =>{
     console.log( "ArrayName " + arrayName);
     console.log( "value " + value);
-    var array =  pm.collectionVariables.get(arrayName);
+    var array =  JSON.stringify(pm.collectionVariables.get(arrayName));
     console.log("Current array is " + array);
     if (!array){
         console.log("----IS empty----")
