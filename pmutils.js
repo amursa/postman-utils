@@ -428,7 +428,7 @@ postman.setEnvironmentVariable("getRandom", (arr, n) => {
 postman.setEnvironmentVariable("addToArray", (arrayName, value) =>{
     console.log( "ArrayName " + arrayName);
     console.log( "value " + value);
-    var array =  pm.environment.get(arrayName);
+    var array =  pm.collectionVariables.get(arrayName);
     console.log("Current array is " + array);
     if (!array){
         console.log("----IS empty----")
@@ -441,7 +441,7 @@ postman.setEnvironmentVariable("addToArray", (arrayName, value) =>{
         console.log("-----Is not empty and is not array" + array);
     }
     console.log("array: " + array);
-    pm.environment.set(arrayName,  array );  
+    pm.collectionVariables.set(arrayName,  array );  
 });
 // postman.setEnvironmentVariable("verifyGetAdId_CMS_ASS", () => {
 //     let options = {
