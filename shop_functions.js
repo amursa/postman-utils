@@ -46,23 +46,10 @@ postman.setEnvironmentVariable("functions", ()  => {
     removeItem = eval(pm.environment.get("removeItem"));
     isValidURL = eval(pm.environment.get("isValidURL"));
     getRandom = eval(pm.environment.get("getRandom"));
-    addToArray = eval(pm.environment.get("addToArray"));
     // verifyASSHasGetAdId = eval(pm.environment.get("verifyGetAdId_CMS_ASS"));
     //------------------END functions----------------------
 });
 
-//usage getCampaignTime(10, 'm',2, 'h',true);
-//Time Key Shortcuts: 
-// Key                Shorthand
-// years            y
-// quarters         Q
-// months           M
-// weeks            w
-// days             d
-// hours            h
-// minutes          m
-// seconds          s
-// milliseconds     ms
 postman.setEnvironmentVariable("getCampaignTime", (startIncrement, startTimeKey, endIncrement, endTimeKey, showdebug) => {
     const startTime = moment();
     var endTime = moment();
@@ -79,10 +66,6 @@ postman.setEnvironmentVariable("getCampaignTime", (startIncrement, startTimeKey,
     pm.collectionVariables.set("endTimeFuture",JSON.stringify(endTimeFuture.toISOString()));
 });
 
-
-// Usage: given array , find by key=value the order element and return the value of a certain another key value from the same element of the array.
-// tests["Start and End dates are the same"] = findObjectByKey(pm.response.json().constraints, "@type", "DateRangeConstraint", "startTimestamp") 
-// === findObjectByKey(pm.response.json().constraints, "@type", "DateRangeConstraint", "endTimestamp");
 postman.setEnvironmentVariable("findObjectByKey", (array, key, value, returnkeyvalue) => {
     console.log("Array is " + array);
 
@@ -424,35 +407,3 @@ postman.setEnvironmentVariable("getRandom", (arr, n) => {
     return result
 });
 
-
-postman.setEnvironmentVariable("addToArray", (arrayName, value) =>{
-    console.log( "ArrayName " + arrayName);
-    console.log( "value " + value);
-    var array =  pm.environment.get(arrayName);
-    console.log("Current array is " + array);
-    if (!array){
-        console.log("----IS empty----")
-        var array = [];
-        array.push(value);
-    } else if (Array.isArray(array)){
-        console.log("----IS array----");
-        array.push( value);
-    } else {
-        console.log("-----Is not empty and is not array" + array);
-    }
-    console.log("array: " + array);
-    pm.environment.set(arrayName,  array );  
-});
-// postman.setEnvironmentVariable("verifyGetAdId_CMS_ASS", () => {
-//     let options = {
-//     url: pm.environment.get("adServingServiceBaseUrl") + "/ads/" + pm.collectionVariable.get("lastAdId"),
-//     method: 'GET',
-//     header: pm.environment.get('listHeader'),
-//     };
-
-//     pm.sendRequest(options, function (err, response) {
-//         pm.test("Response is 200", function() {
-//             pm.response.to.have.status(200);
-//         });
-//     });
-// });
