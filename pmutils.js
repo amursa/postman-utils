@@ -67,14 +67,14 @@ postman.setEnvironmentVariable("getCampaignTime", (startIncrement, startTimeKey,
     const startTime = moment();
     var endTime = moment();
     endTime = endTime.add(2,'d');
-    toPrint("---------------------------------Current time " + startTime.toISOString() + " end Time " + endTime.toISOString(), showdebug);
+    console.log("---------------------------------Current time " + startTime.toISOString() + " end Time " + endTime.toISOString(), showdebug);
     pm.collectionVariables.set("startTime", JSON.stringify(startTime.toISOString()));
     pm.collectionVariables.set("endTime", JSON.stringify(endTime.toISOString()));
 
     var startTimeFuture = startTime.add(startIncrement, startTimeKey);
     var endTimeFuture = endTime.add(endIncrement, endTimeKey);
-    toPrint("---------------------------------Future Start time " + startTimeFuture.toISOString(), showdebug);
-    toPrint("---------------------------------Future Start time " + endTimeFuture.toISOString(), showdebug);
+    console.log("---------------------------------Future Start time " + startTimeFuture.toISOString(), showdebug);
+    console.log("---------------------------------Future Start time " + endTimeFuture.toISOString(), showdebug);
     pm.collectionVariables.set("startTimeFuture", JSON.stringify(startTimeFuture.toISOString()));
     pm.collectionVariables.set("endTimeFuture",JSON.stringify(endTimeFuture.toISOString()));
 });
